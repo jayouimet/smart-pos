@@ -1,0 +1,22 @@
+table:
+  name: system_roles
+  schema: public
+array_relationships:
+  - name: role_permissions
+    using:
+      manual_configuration:
+        column_mapping:
+          id: role_id
+        insertion_order: null
+        remote_table:
+          name: role_permissions
+          schema: public
+  - name: users
+    using:
+      manual_configuration:
+        column_mapping:
+          id: system_role_id
+        insertion_order: null
+        remote_table:
+          name: users
+          schema: public

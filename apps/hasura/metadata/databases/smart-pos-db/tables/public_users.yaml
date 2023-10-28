@@ -1,0 +1,31 @@
+table:
+  name: users
+  schema: public
+object_relationships:
+  - name: organization
+    using:
+      manual_configuration:
+        column_mapping:
+          organization_id: id
+        insertion_order: null
+        remote_table:
+          name: organizations
+          schema: public
+  - name: organization_role
+    using:
+      manual_configuration:
+        column_mapping:
+          organization_role_id: id
+        insertion_order: null
+        remote_table:
+          name: organization_roles
+          schema: public
+  - name: system_role
+    using:
+      manual_configuration:
+        column_mapping:
+          system_role_id: id
+        insertion_order: null
+        remote_table:
+          name: system_roles
+          schema: public

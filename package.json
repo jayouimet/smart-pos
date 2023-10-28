@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "develop": "turbo run dev & vercel dev --listen 5000",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "eslint": "^8.48.0",
+    "prettier": "^3.0.3",
+    "tsconfig": "*",
+    "turbo": "latest"
+  },
+  "name": "llm-project-boilerplate",
+  "packageManager": "yarn@1.22.19",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

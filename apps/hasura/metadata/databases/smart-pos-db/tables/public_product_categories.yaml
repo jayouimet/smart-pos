@@ -1,0 +1,22 @@
+table:
+  name: product_categories
+  schema: public
+object_relationships:
+  - name: category
+    using:
+      manual_configuration:
+        column_mapping:
+          category_id: id
+        insertion_order: null
+        remote_table:
+          name: categories
+          schema: public
+  - name: product
+    using:
+      manual_configuration:
+        column_mapping:
+          product_id: id
+        insertion_order: null
+        remote_table:
+          name: products
+          schema: public

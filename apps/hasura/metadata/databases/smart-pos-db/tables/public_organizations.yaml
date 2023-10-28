@@ -1,0 +1,22 @@
+table:
+  name: organizations
+  schema: public
+array_relationships:
+  - name: products
+    using:
+      manual_configuration:
+        column_mapping:
+          id: organization_id
+        insertion_order: null
+        remote_table:
+          name: products
+          schema: public
+  - name: users
+    using:
+      manual_configuration:
+        column_mapping:
+          id: organization_id
+        insertion_order: null
+        remote_table:
+          name: users
+          schema: public

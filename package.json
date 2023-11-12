@@ -4,7 +4,12 @@
     "build": "turbo run build",
     "develop": "turbo run dev & vercel dev --listen 5000",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "hasura-metadata": "cd apps/hasura && hasura metadata apply --envfile ../../.env.dev",
+    "hasura-migrate": "cd apps/hasura && hasura migrate apply --envfile ../../.env.dev",
+    "hasura-reload": "cd apps/hasura && hasura metadata reload --envfile ../../.env.dev",
+    "hasura-seed": "cd apps/hasura && hasura seed apply --envfile ../../.env.dev",
+    "hasura-console": "cd apps/hasura && hasura console --envfile ../../.env.dev"
   },
   "devDependencies": {
     "eslint": "^8.48.0",

@@ -27,7 +27,8 @@
       "@contexts/*": ["contexts/*"],
       "@hooks/*": ["hooks/*"],
       "@components/*": ["components/*"],
-      "@assets/*": ["assets/*"]
+      "@assets/*": ["assets/*"],
+      "@utils/*": ["utils/*"]
     }
   },
   "include": [
@@ -36,7 +37,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "app/api/test.js",
-    "app/dashboard/proposal/page.tsx"
   ],
   "exclude": ["node_modules"]
 }

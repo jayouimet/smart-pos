@@ -1,38 +1,26 @@
-import { Box, Center, Text } from "@chakra-ui/react";
-import exampleImg from "@assets/example.jpg";
-import NextImage from "next/image";
+'use client';
 
-const ServicesPage = () => {
+import { Box, Center, Text } from '@chakra-ui/react';
+
+const HomePage = () => {
   return (
     <Center py={6}>
       <Box
-        maxW={"445px"}
-        w={"full"}
-        bg={"gray.900"}
-        boxShadow={"2xl"}
-        rounded={"lg"}
+        maxW={'445px'}
+        w={'full'}
+        bg={'gray.900'}
+        boxShadow={'2xl'}
+        rounded={'lg'}
         p={9}
         pb={9}
-        overflow={"hidden"}
+        overflow={'hidden'}
       >
-        <Center py={6}>
-          <Box
-            h={32}
-            w={32}
-            pos={"relative"}
-            borderRadius="50%"
-            overflow="hidden"
-          >
-            <NextImage src={exampleImg} alt="My Picture" fill />
-          </Box>
-        </Center>
-
-        <Box h={"6vh"} mb={6} pos={"relative"}>
+        <Box h={'6vh'} mb={6} pos={'relative'}>
           <Text
-            color={"green.500"}
-            textTransform={"uppercase"}
+            color={'brand.primary.green.100'}
+            textTransform={'uppercase'}
             fontWeight={800}
-            fontSize={"lg"}
+            fontSize={'lg'}
             letterSpacing={1.1}
           >
             Index page for landing
@@ -43,4 +31,4 @@ const ServicesPage = () => {
   );
 };
 
-export default ServicesPage;
+export default HomePage;

@@ -1,32 +1,31 @@
-import { Box, Center, Text } from "@chakra-ui/react";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Grid,
+  GridItem,
+  Heading,
+  Box,
+  Text,
+  Flex,
+} from '@chakra-ui/react';
+import { Checkbox, CheckboxGroup } from '@chakra-ui/react';
 
-const ServicesPage = () => {
+function DashboardIndex() {
   return (
-    <Center py={6}>
-      <Box
-        maxW={"445px"}
-        w={"full"}
-        bg={"gray.900"}
-        boxShadow={"2xl"}
-        rounded={"lg"}
-        p={9}
-        pb={9}
-        overflow={"hidden"}
-      >
-        <Box h={"6vh"} mb={6} pos={"relative"}>
-          <Text
-            color={"green.500"}
-            textTransform={"uppercase"}
-            fontWeight={800}
-            fontSize={"lg"}
-            letterSpacing={1.1}
-          >
-            Index page for dashboard
-          </Text>
-        </Box>
-      </Box>
-    </Center>
+    <Grid
+      h="91vh"
+      templateRows={{
+        base: 'repeat(4, 1fr)',
+        md: 'repeat(4, 1fr)',
+        xl: 'repeat(2, 1fr)',
+      }}
+      templateColumns="repeat(6, 1fr)"
+      gap={{ base: 3, xl: 4 }}
+    >
+      
+    </Grid>
   );
-};
+}
 
-export default ServicesPage;
+export default DashboardIndex;

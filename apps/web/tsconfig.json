@@ -23,12 +23,13 @@
     "strictNullChecks": true,
     "baseUrl": "./src/",
     "paths": {
+      "@app/*": ["app/*"],
       "@styles/*": ["styles/*"],
       "@contexts/*": ["contexts/*"],
       "@hooks/*": ["hooks/*"],
       "@components/*": ["components/*"],
       "@assets/*": ["assets/*"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
     }
   },
   "include": [

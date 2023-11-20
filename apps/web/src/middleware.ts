@@ -23,7 +23,7 @@ export async function middleware(req: NextRequest) {
     const decodedJwt = jwtDecode<any>(token);
     // TODO more condition based on roles from decodedJwt
     if (!decodedJwt.role) {
-      return NextResponse.redirect(new URL('/auth/login', req.url));
+      return NextResponse.redirect(new URL('/', req.url));
     }
     if (
       adminRoutes.some((adminroute) => req.nextUrl.pathname.startsWith(adminroute)) &&
@@ -32,7 +32,7 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL('/dashboard', req.url));
     }
   } else {
-    return NextResponse.redirect(new URL('/auth/login', req.url));
+    return NextResponse.redirect(new URL('/', req.url));
   }
 }
 

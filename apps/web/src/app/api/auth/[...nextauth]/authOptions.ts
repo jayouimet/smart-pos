@@ -116,7 +116,7 @@ export const authOptions: AuthOptions = {
     encode: async ({ secret, token }): Promise<string> => {
       const jwtClaims = {
         id: token?.id,
-        role: token?.system_role,
+        role: token?.role,
         name: token?.name,
         image: token?.image,
         profileCompleted: token?.profileCompleted,

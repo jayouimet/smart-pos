@@ -22,10 +22,11 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
 } from "@chakra-ui/icons";
-import { signIn } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function LandingHeader() {
   const { isOpen, onToggle } = useDisclosure();
+  const { data: session, status } = useSession();
 
   return (
     <Box>
@@ -74,21 +75,40 @@ export default function LandingHeader() {
           direction={"row"}
           spacing={6}
         >
-          <Button
-            // as={"a"}
-            display={{ base: "none", md: "inline-flex" }}
-            fontSize={"sm"}
-            fontWeight={600}
-            color={"white"}
-            bg={"pink.400"}
-            // href={"/auth/register"}
-            _hover={{
-              bg: "pink.300",
-            }}
-            onClick={() => signIn()}
-          >
-            Sign In
-          </Button>
+          {
+            session?.user ?
+            <Button
+              // as={"a"}
+              display={{ base: "none", md: "inline-flex" }}
+              fontSize={"sm"}
+              fontWeight={600}
+              color={"white"}
+              bg={"pink.400"}
+              // href={"/auth/register"}
+              _hover={{
+                bg: "pink.300",
+              }}
+              onClick={() => signOut()}
+            >
+              Sign Out
+            </Button>
+            :
+            <Button
+              // as={"a"}
+              display={{ base: "none", md: "inline-flex" }}
+              fontSize={"sm"}
+              fontWeight={600}
+              color={"white"}
+              bg={"pink.400"}
+              // href={"/auth/register"}
+              _hover={{
+                bg: "pink.300",
+              }}
+              onClick={() => signIn()}
+            >
+              Sign In
+            </Button>
+          }
         </Stack>
       </Flex>
 

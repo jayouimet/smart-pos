@@ -12,7 +12,6 @@ export const authOptions: AuthOptions = {
       // The name to display on the sign in form (e.g. "Sign in with...")
       name: "Credentials",
       async authorize(credentials, req) {
-        console.log(credentials)
         if (!credentials) {
           return null;
         }

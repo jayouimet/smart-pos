@@ -5,56 +5,45 @@ import {
   Avatar,
   Box,
   Flex,
-  HStack,
-  VStack,
   Icon,
-  useColorModeValue,
-  Text,
-  Drawer,
-  DrawerContent,
   useDisclosure,
   BoxProps,
   FlexProps,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
   Stack,
 } from '@chakra-ui/react';
-import {
-  FiHome,
-  FiMenu,
-  FiChevronDown,
-  FiLayers,
-  FiLogOut,
-  FiCpu,
-  FiUser,
-  FiUsers,
-  FiBox,
-} from 'react-icons/fi';
+import { FiHome, FiLayers, FiLogOut, FiCpu } from 'react-icons/fi';
 import { IconType } from 'react-icons';
-import { useSession, signOut } from 'next-auth/react';
-import { useEffect } from 'react';
-import { Link } from '@chakra-ui/next-js';
-import { capitalize } from '@utils/helperFunctions';
+import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
+import { signOut } from 'next-auth/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/navigation';
-import { POSUserRoles } from 'types/POSUserRoles';
+import MenuButton from '@components/navigation/MenuButton';
 
-interface LinkItemProps {
+export enum UserRole {
+  ADMIN = 'admin',
+  USER = 'user',
+  MEMBER = 'member',
+}
+
+export interface LinkItemProps {
   name: string;
   icon: IconType;
   href: string;
-  minRole: POSUserRoles;
+  minRole: UserRole;
 }
 
 interface NavItemProps extends FlexProps {
   icon?: IconType;
 }
 
-interface MobileProps extends FlexProps {
+interface MobileProps extends BoxProps {
   onOpen: () => void;
+  onClose: () => void;
+  onOpenModal: () => void;
+  onCloseModal: () => void;
+  onNavigation: (url: string) => void;
+  isOpenModal: boolean;
 }
 
 interface SidebarProps extends BoxProps {
@@ -70,25 +59,18 @@ interface DashboardSidebarProps extends BoxProps {
 }
 
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Home', icon: FiHome, href: '/dashboard/', minRole: POSUserRoles.USER },
-  { name: 'Profile', icon: FiUser, href: '/dashboard/profile', minRole: POSUserRoles.USER },
+  { name: 'Home', icon: FiHome, href: '/', minRole: UserRole.USER },
   {
-    name: 'Organizations',
-    icon: FiUsers,
-    href: '/dashboard/organizations',
-    minRole: POSUserRoles.ADMIN,
+    name: 'Engines',
+    icon: FiCpu,
+    href: '/engines',
+    minRole: UserRole.ADMIN,
   },
   {
     name: 'Categories',
     icon: FiLayers,
-    href: '/dashboard/categories',
-    minRole: POSUserRoles.ADMIN,
-  },
-  {
-    name: 'Items',
-    icon: FiBox,
-    href: '/dashboard/items',
-    minRole: POSUserRoles.ADMIN,
+    href: '/categories',
+    minRole: UserRole.ADMIN,
   },
 ];
 
@@ -103,17 +85,17 @@ const SidebarContent = ({
   const { data: session } = useSession();
 
   return (
-    <Box pos="fixed" py={6} h="full" {...rest}>
+    <Box pos="fixed" py={{ base: 3, xl: 5 }} h="full" {...rest}>
       <Flex
         transition="3s ease"
-        bg={'rgba(255, 255, 255, 0.30)'}
-        ml={6}
-        p={4}
+        bg={'whiteAlpha.400'}
+        ml={{ base: 3, xl: 5 }}
+        p={2}
         borderRadius="30px"
         align="center"
         direction={'column'}
         justify="space-between"
-        w={{ base: 'full', md: 24 }}
+        w={{ base: 'full', md: 16 }}
         h="full"
       >
         {/* LOGO */}
@@ -121,30 +103,36 @@ const SidebarContent = ({
           <Box
             as="button"
             mb={4}
-            transition="300ms"
-            _hover={{
-              bg: 'brand.primary.green.300',
-              color: 'white',
-            }}
-            p={1}
-            borderRadius="full"
             onClick={() => {
-              onNavigation('/dashboard/profile');
+              onNavigation('/profile');
             }}
           >
-            <Avatar size={'lg'} src={session?.user?.image ?? undefined} />
+            <Avatar
+              size={'full'}
+              src={session?.user?.image ?? undefined}
+              transition="300ms"
+              _hover={{
+                shadow: 'lightGreen',
+              }}
+            />
           </Box>
 
           {/* LINK ITEMS */}
 
           {LinkItems.map((link) => {
+            if (
+              (link.minRole === UserRole.ADMIN &&
+                session?.user.role === UserRole.ADMIN) ||
+              link.minRole === UserRole.USER
+            )
               return (
                 <Box
+                  key={link.name}
                   onClick={() => {
                     onNavigation(link.href);
                   }}
                 >
-                  <NavItem key={link.name} icon={link?.icon}/>
+                  <NavItem key={link.name} icon={link.icon} />
                 </Box>
               );
           })}
@@ -183,7 +171,7 @@ const SidebarContent = ({
                   {categories.map((category) => (
                     <NavItem
                       key={category.name}
-                      href={`/dashboard/services/${category.slug}`}
+                      href={`/services/${category.slug}`}
                     />
                   ))}
                 </Stack>
@@ -191,6 +179,8 @@ const SidebarContent = ({
             </AccordionItem>
           </Accordion> */}
         </Stack>
+
+        {/* CREATE CONTENT MENU */}
 
         {/* // LOGOUT*/}
         <Stack>
@@ -209,7 +199,7 @@ const SidebarContent = ({
   );
 };
 
-const NavItem = ({ icon, ...rest }: NavItemProps) => {
+export const NavItem = ({ icon, ...rest }: NavItemProps) => {
   return (
     <Box style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
       <Flex
@@ -223,19 +213,19 @@ const NavItem = ({ icon, ...rest }: NavItemProps) => {
           width={'full'}
           lineHeight={1}
           textAlign="center"
-          p="4"
+          p={2}
+          mb={2}
           borderRadius={'full'}
           cursor="pointer"
           transition="300ms"
           _hover={{
             bg: 'brand.primary.green.300',
-            color: 'white',
           }}
         >
           {icon && (
             <Icon
               fontSize="32"
-              mt={'1px'}
+              // mt={'1px'}
               _groupHover={{
                 color: 'white',
               }}
@@ -248,76 +238,78 @@ const NavItem = ({ icon, ...rest }: NavItemProps) => {
   );
 };
 
-const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+const MobileNav = ({
+  onNavigation,
+  onOpen,
+  onClose,
+  onOpenModal,
+  onCloseModal,
+  isOpenModal,
+  ...rest
+}: MobileProps) => {
   const { data: session } = useSession();
+  const [showAdditionalBox, setShowAdditionalBox] = useState(false);
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
 
   return (
-    <Flex
-      ml={{ base: 0, md: 60 }}
-      px={{ base: 4, md: 4 }}
-      height="20"
-      alignItems="center"
-      bg={'brand.bg.main'}
-      borderBottomWidth="1px"
-      borderBottomColor={'whiteAlpha.500'}
-      justifyContent={{ base: 'space-between', md: 'flex-end' }}
+    <Box
+      position="fixed"
+      bottom="0"
+      zIndex="9999"
+      bg="linear-gradient(to top, var(--chakra-colors-brand-bg-main) 75%, transparent 85%)"
+      pt={5}
+      px={3}
+      w={'full'}
       {...rest}
     >
-      <IconButton
-        display={{ base: 'flex', md: 'none' }}
-        onClick={onOpen}
-        variant="outline"
-        aria-label="open menu"
-        icon={<FiMenu />}
-      />
+      <Flex
+        mt={1}
+        mb={3}
+        mx={'auto'}
+        px={3}
+        py={1}
+        width={'full'}
+        alignItems="center"
+        bg={'whiteAlpha.500'}
+        borderRadius={20}
+        justifyContent="space-between"
+        position={'relative'}
+      >
+        <MenuButton
+          isButtonClicked={isButtonClicked}
+          showAdditionalBox={showAdditionalBox}
+          LinkItems={LinkItems}
+          LinkItemOnClick={(href: string) => {
+            setShowAdditionalBox(!showAdditionalBox);
+            setIsButtonClicked(!isButtonClicked);
+            onNavigation(href);
+          }}
+          onMenuClick={() => {
+            setShowAdditionalBox(!showAdditionalBox);
+            setIsButtonClicked(!isButtonClicked);
+          }}
+        />
 
-      {/*<Box h={30} w={161} pos={'relative'} display={{ md: 'none' }}>
-        <NextImage src={logo} alt="My Picture" fill />
-      </Box>*/}
-
-      <HStack spacing={{ base: '0', md: '6' }}>
-        <Flex alignItems={'center'}>
-          <Menu>
-            <MenuButton
-              py={2}
-              transition="all 0.3s"
-              _focus={{ boxShadow: 'none' }}
-            >
-              <HStack>
-                <Avatar size={'sm'} src={session?.user?.image ?? undefined} />
-                <VStack
-                  display={{ base: 'none', md: 'flex' }}
-                  alignItems="flex-start"
-                  spacing="1px"
-                  ml="2"
-                >
-                  <Text fontSize="sm">{session?.user?.name}</Text>
-                  <Text fontSize="xs" color="gray.500">
-                    {session?.user?.role ? capitalize(session?.user?.role) : ''}
-                  </Text>
-                </VStack>
-                <Box display={{ base: 'none', md: 'flex' }}>
-                  <FiChevronDown />
-                </Box>
-              </HStack>
-            </MenuButton>
-            <MenuList bg={'gray.900'} borderColor={'whiteAlpha.500'}>
-              <Link href={'/dashboard/profile'}>
-                <MenuItem>Profile</MenuItem>
-              </Link>
-              <MenuDivider />
-              <MenuItem
-                onClick={() => {
-                  signOut();
-                }}
-              >
-                Sign out
-              </MenuItem>
-            </MenuList>
-          </Menu>
-        </Flex>
-      </HStack>
-    </Flex>
+        <Box
+          as="button"
+          onClick={() => {
+            onNavigation('/profile');
+          }}
+        >
+          <Avatar
+            size={'md'}
+            src={session?.user?.image ?? undefined}
+            transition="300ms"
+            _hover={{
+              shadow: { base: 'none', md: 'lightGreen' },
+            }}
+            _active={{
+              shadow: 'lightGreen',
+            }}
+          />
+        </Box>
+      </Flex>
+    </Box>
   );
 };
 
@@ -369,50 +361,30 @@ const DashboardSidebar = ({ children, ...rest }: DashboardSidebarProps) => {
         onCloseModal={onCloseModal}
         onNavigation={onNavigation}
         display={{ base: 'none', md: 'block' }}
-        zIndex="9999"
+        zIndex="999"
       />
-      <Drawer
-        isOpen={isOpen}
-        placement="left"
+      <MobileNav
+        onOpen={onOpen}
+        display={{ base: 'flex', md: 'none' }}
+        onNavigation={onNavigation}
         onClose={onClose}
-        returnFocusOnClose={false}
-        onOverlayClick={onClose}
-        size="full"
-      >
-        <DrawerContent>
-          <SidebarContent
-            onClose={onClose}
-            isOpenModal={isOpenModal}
-            onOpenModal={onOpenModal}
-            onCloseModal={onCloseModal}
-            onNavigation={onNavigation}
-          />
-          <Box
-            as="button"
-            position={'absolute'}
-            top={5}
-            right={5}
-            onClick={onClose}
-          >
-            <CloseIcon />
-          </Box>
-        </DrawerContent>
-      </Drawer>
-      <MobileNav onOpen={onOpen} display={{ base: 'flex', md: 'none' }} />
+        onOpenModal={onOpenModal}
+        onCloseModal={onCloseModal}
+        isOpenModal={isOpenModal}
+      />
       <Box
-        ml={{ base: 0, md: '120px' }}
-        py={4}
-        px={{ base: 4, lg: 8 }}
+        ml={{ base: 0, md: '80px', xl: '88px' }}
+        p={{ base: 3, xl: 5 }}
         position={'relative'}
       >
         {isOpenModal && (
           // TODO create a context inside the navbar (or dashboard layout), to keep track of all state related to the Create Content Flow.
           // This way we can decide if we want to keep all the state when closing/opening the menu, or if we wish to reset them.
           // Note: Currently, it resets them because we mount/unmount the component
-          <Box ml={{ base: -4, lg: -8 }} mt={{ base: -20, md: 0 }}>
+          <Box ml={{ base: -4, lg: -8 }} mt={{ base: 0, md: 0 }}>
             <Box
-              background="rgba(0, 0, 0, 0.5)"
-              backdropFilter="blur(20px)"
+              background="rgba(80, 80, 80, 0.20)"
+              backdropFilter="blur(100px)"
               position={'fixed'}
               top="0"
               right="0"

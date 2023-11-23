@@ -33,7 +33,7 @@ function DashboardIndex() {
     >
       <Stack>
         <Textarea value={prompt} resize={"none"} width={"25vw"} height={"20vh"} onChange={handleChangePrompt} />
-        <Button onClick={() => complete("hello, how are you doing")}>Find it</Button>
+        <Button onClick={() => complete(prompt)}>Find it</Button>
         <Textarea value={completion} resize={"none"} width={"25vw"} height={"20vh"} readOnly={true} />
       </Stack>
     </Grid>

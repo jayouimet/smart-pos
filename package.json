@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "develop": "turbo run dev & vercel dev --listen 5000",
+    "develop": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "hasura-metadata": "cd apps/hasura && hasura metadata apply --envfile ../../.env.dev",

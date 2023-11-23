@@ -1,5 +1,16 @@
 version: "3.6"
+networks:
+  net:
+    driver: bridge
 services:
+  chroma-server:
+    image: ghcr.io/chroma-core/chroma:latest
+    volumes:
+      - index_data:/chroma/.chroma/index
+    ports:
+      - 8000:8000
+    networks:
+      - net
   postgres:
     image: postgres:15
     restart: always
@@ -33,4 +44,8 @@ services:
       retries: 5
       start_period: 5s
 volumes:
+  index_data:
+    driver: local
+  backups:
+    driver: local
   db_data:

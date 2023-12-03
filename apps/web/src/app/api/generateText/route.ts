@@ -1,3 +1,4 @@
+import { similaritySearch } from "@utils/chromadb";
 import { StreamingTextResponse } from "ai";
 import { Ollama } from "langchain/llms/ollama";
 
@@ -14,7 +15,17 @@ export async function POST(req: Request) {
       model: "llama2",
     });
 
-    const stream = await ollama.stream(prompt);
+    const context = await similaritySearch(
+      prompt,
+      process.env.CHROMADB_COLLECTION_NAME || ''
+    );
+    const newPrompt = `
+      ${prompt}
+      Here is some of the item found in the store with their location:
+      ${context}
+    `
+
+    const stream = await ollama.stream(newPrompt);
     return new StreamingTextResponse(stream);
   } catch (error) {
     return new Response(String(error), {

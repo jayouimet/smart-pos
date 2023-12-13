@@ -10,8 +10,7 @@ const Link = defineStyleConfig({
   // Two variants: outline and solid
   variants: {
     gray: ({ colorScheme }) => ({
-      color: 'blackAlpha.500',
-      bg: 'red',
+      color: 'whiteAlpha.500',
     }),
   },
   // The default size and variant values

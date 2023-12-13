@@ -28,7 +28,7 @@ const Button = defineStyleConfig({
   // The default size and variant values
   defaultProps: {
     variant: 'outline',
-    colorScheme: 'brand.primary.green',
+    colorScheme: 'brand.primary.red',
   },
   // Two variants: outline and solid
   variants: {

@@ -22,7 +22,7 @@ const theme = extendTheme({
   styles: {
     global: {
       body: {
-        bg: '#1F1F22', // Or any other color from the Chakra UI theme or custom palette
+        bg: '#332929', // Or any other color from the Chakra UI theme or custom palette
         color: 'white', // This sets the default text color
       },
     },
@@ -35,16 +35,16 @@ const theme = extendTheme({
         secondary: 'rgba(255, 255, 255, 0.30)',
       },
       alpha: {
-        greenAlpha: {
-          100: 'rgba(1, 255, 140, 0.10)',
-          200: 'rgba(1, 255, 140, 0.20)',
-          300: 'rgba(1, 255, 140, 0.30)',
-          400: 'rgba(1, 255, 140, 0.40)',
-          500: 'rgba(1, 255, 140, 0.50)',
-          600: 'rgba(1, 255, 140, 0.60)',
-          700: 'rgba(1, 255, 140, 0.70)',
-          800: 'rgba(1, 255, 140, 0.80)',
-          900: 'rgba(1, 255, 140, 0.90)',
+        redAlpha: {
+          100: 'rgba(255, 1, 1, 0.10)',
+          200: 'rgba(255, 1, 1, 0.20)',
+          300: 'rgba(255, 1, 1, 0.30)',
+          400: 'rgba(255, 1, 1, 0.40)',
+          500: 'rgba(255, 1, 1, 0.50)',
+          600: 'rgba(255, 1, 1, 0.60)',
+          700: 'rgba(255, 1, 1, 0.70)',
+          800: 'rgba(255, 1, 1, 0.80)',
+          900: 'rgba(255, 1, 1, 0.90)',
         },
       },
       primary: {
@@ -60,38 +60,16 @@ const theme = extendTheme({
           800: '#333333',
           900: '#1A1A1A',
         },
-        green: {
-          100: '#01FF8C',
-          200: '#01E87F',
-          300: '#01D072',
-          400: '#01B965',
-          500: '#01A259',
-          600: '#008A4C',
-          700: '#00733F',
-          800: '#005B32',
-          900: '#004425',
-        },
-        lime: {
-          100: '#BFFF00',
-          200: '#AEE800',
-          300: '#9CD000',
-          400: '#8BB900',
-          500: '#79A200',
-          600: '#688A00',
-          700: '#567300',
-          800: '#455B00',
-          900: '#334400',
-        },
-        yellow: {
-          100: '#FAC400',
-          200: '#E3B200',
-          300: '#CCA000',
-          400: '#B58E00',
-          500: '#9F7D00',
-          600: '#886B00',
-          700: '#715900',
-          800: '#5A4700',
-          900: '#433500',
+        red: {
+          100: '#FED7D7',
+          200: '#FEB2B2',
+          300: '#FC8181',
+          400: '#F56565',
+          500: '#E53E3E',
+          600: '#C53030',
+          700: '#9B2C2C',
+          800: '#822727',
+          900: '#63171B',
         },
       },
       secondary: {
@@ -109,7 +87,7 @@ const theme = extendTheme({
     },
   },
   shadows: {
-    lightGreen: '0 0 3px 3px var(--chakra-colors-brand-primary-green-100)',
+    lightRed: '0 0 3px 3px var(--chakra-colors-brand-primary-red-100)',
   },
   components: {
     Button,

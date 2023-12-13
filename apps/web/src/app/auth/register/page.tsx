@@ -2,7 +2,7 @@
 
 import { Flex, Stack, Center } from '@chakra-ui/layout';
 import { Formik, FormikProps, useFormik } from 'formik';
-import { Button, Input } from '@chakra-ui/react';
+import { Button, Input, Link } from '@chakra-ui/react';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -55,45 +55,50 @@ export default function Register() {
       w={'fit-content'}
     >
       <Center>
-        <form onSubmit={formik.handleSubmit}>
-          <Stack
-            spacing={4} 
-            w={320}
-          >
-            <Input 
-              name="email" 
-              placeholder='Email' 
-              onChange={formik.handleChange}
-              value={formik.values.email
-            }/>
-            <Input 
-              name="first_name" 
-              placeholder='First name' 
-              onChange={formik.handleChange}
-              value={formik.values.first_name
-            }/>
-            <Input 
-              name="last_name" 
-              placeholder='Last name' 
-              onChange={formik.handleChange}
-              value={formik.values.last_name
-            }/>
-            <Input 
-              name="phone_number" 
-              placeholder='Phone number' 
-              onChange={formik.handleChange}
-              value={formik.values.phone_number
-            }/>
-            <Input 
-              name="password"
-              type="password"
-              placeholder='Password'
-              onChange={formik.handleChange}
-              value={formik.values.password}
-            />
-            <Button type="submit">Submit</Button>
-          </Stack>
-        </form>
+        <Stack>
+          <form onSubmit={formik.handleSubmit}>
+            <Stack
+              spacing={4} 
+              w={320}
+            >
+              <Input 
+                name="email" 
+                placeholder='Email' 
+                onChange={formik.handleChange}
+                value={formik.values.email
+              }/>
+              <Input 
+                name="first_name" 
+                placeholder='First name' 
+                onChange={formik.handleChange}
+                value={formik.values.first_name
+              }/>
+              <Input 
+                name="last_name" 
+                placeholder='Last name' 
+                onChange={formik.handleChange}
+                value={formik.values.last_name
+              }/>
+              <Input 
+                name="phone_number" 
+                placeholder='Phone number' 
+                onChange={formik.handleChange}
+                value={formik.values.phone_number
+              }/>
+              <Input 
+                name="password"
+                type="password"
+                placeholder='Password'
+                onChange={formik.handleChange}
+                value={formik.values.password}
+              />
+              <Button type="submit">Submit</Button>
+            </Stack>
+          </form>
+          <Center>
+            <Link variant={'gray'} href={"/auth/signin"}>Already have an account?</Link>
+          </Center>
+        </Stack>
       </Center>
     </Flex>
   )

@@ -1,14 +1,16 @@
 'use client';
 
-import { Box, Center, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Stack, Text } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
 
 const HomePage = () => {
+  const router = useRouter();
+
   return (
     <Center py={6}>
       <Box
         maxW={'445px'}
         w={'full'}
-        bg={'gray.900'}
         boxShadow={'2xl'}
         rounded={'lg'}
         p={9}
@@ -16,15 +18,12 @@ const HomePage = () => {
         overflow={'hidden'}
       >
         <Box h={'6vh'} mb={6} pos={'relative'}>
-          <Text
-            color={'brand.primary.green.100'}
-            textTransform={'uppercase'}
-            fontWeight={800}
-            fontSize={'lg'}
-            letterSpacing={1.1}
-          >
-            Index page for landing
-          </Text>
+          <Center>
+            <Stack>
+              <Button variant={'solid'} onClick={() => { router.push('/auth/signin') }}>Login</Button>
+              <Button variant={'solid'} onClick={() => { router.push('/auth/register') }}>Register</Button>
+            </Stack>
+          </Center>
         </Box>
       </Box>
     </Center>

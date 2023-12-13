@@ -19,21 +19,23 @@ export const authOptions: AuthOptions = {
         const password_hash = await bcrypt.hash(credentials.password, 10);
 
         // we query the database to check if the user already exist
-        const queryUserRes = await queryUserByUsername({
-          username: credentials.username ?? '',
+        const queryUserRes = await queryUserByEmail({
+          email: credentials.email ?? '',
         });
 
         let user: User;
 
-        if (!queryUserRes) {
+        if (credentials.action === 'register' && !queryUserRes) {
           const registerRes = await registerUser({
-            username: credentials.username,
-            password_hash: password_hash
+            email: credentials.email,
+            password_hash: password_hash,
+            first_name: credentials.first_name,
+            last_name: credentials.last_name,
           });
 
           user = {
             id: registerRes.id,
-            username: registerRes.username,
+            email: registerRes.email,
             system_role: registerRes.system_role.name,
             password_hash: registerRes.password_hash
           }
@@ -41,7 +43,7 @@ export const authOptions: AuthOptions = {
         } else {
           user = {
             id: queryUserRes.id,
-            username: queryUserRes.username,
+            email: queryUserRes.email,
             system_role: queryUserRes.system_role.name,
             password_hash: queryUserRes.password_hash
           };
@@ -60,8 +62,11 @@ export const authOptions: AuthOptions = {
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "Username" },
-        password: { label: "Password", type: "password" }
+        email: { label: "Email", type: "text", placeholder: "Email" },
+        password: { label: "Password", type: "password" },
+        action: { label: "Action", type: "text", placeholder: "Action" },
+        first_name: { label: "First name", type: "text", placeholder: "First name" },
+        last_name: { label: "Last name", type: "text", placeholder: "Last name" },
       }
     })
   ],
@@ -150,26 +155,26 @@ export const authOptions: AuthOptions = {
     },
   },
   pages: {
-    // signIn: '/auth/signin',
+    signIn: '/auth/signin',
     // signOut: '/auth/signout',
-    error: '/auth/error', // Error code passed in query string as ?error=
+    // error: '/auth/error', // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // (used for check email message)
     // newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
   },
 };
 
-async function queryUserByUsername({ username }: { username: string }) {
+async function queryUserByEmail({ email }: { email: string }) {
   const searchUserQuery = `
-      query queryUserByUsername(
-        $username: String!,
+      query queryUserByEmail(
+        $email: String!,
       ) {
         users (
           where: {
-            username: { _eq: $username}
+            email: { _eq: $email}
           }
         ) {
           id
-          username
+          email
           password_hash
           system_role {
             id
@@ -180,9 +185,9 @@ async function queryUserByUsername({ username }: { username: string }) {
     `;
 
   const graphqlQuery = {
-    operationName: 'queryUserByUsername',
+    operationName: 'queryUserByEmail',
     query: searchUserQuery,
-    variables: { username: username },
+    variables: { email: email },
   };
 
   const result = await axios.request({
@@ -206,7 +211,7 @@ async function queryUserByPk({ id }: { id: string }) {
           id: $id
         ) {
           id
-          username
+          email
           password_hash
           system_role {
             id
@@ -235,15 +240,15 @@ async function queryUserByPk({ id }: { id: string }) {
 }
 
 async function registerUser({
-  username,
-  password_hash
-  // firstName,
-  // lastName,
+  email,
+  password_hash,
+  first_name,
+  last_name,
 }: {
-  username: string;
+  email: string;
   password_hash: string;
-  // firstName: string;
-  // lastName: string;
+  first_name: string;
+  last_name: string;
 }) {
   const roleQuery = `
       query roleQuery(
@@ -265,7 +270,7 @@ async function registerUser({
         insert_users(objects: [$user]) {
             returning {
                 id
-                username
+                email
                 password_hash
                 system_role {
                     id
@@ -298,10 +303,10 @@ async function registerUser({
     query: registerMutation,
     variables: {
       user: {
-        username: username,
+        email: email,
         password_hash: password_hash,
-        // first_name: firstName,
-        // last_name: lastName,
+        first_name: first_name,
+        last_name: last_name,
         system_role_id: role_id,
       },
     },

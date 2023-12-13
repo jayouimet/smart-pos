@@ -14,7 +14,7 @@ declare module 'next-auth' {
 
   interface User extends DefaultUser {
     system_role: string;
-    username: string;
+    email: string;
     password_hash: string;
   }
 }

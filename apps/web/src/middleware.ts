@@ -16,7 +16,16 @@ export async function middleware(req: NextRequest) {
     raw: true,
   });
 
-  const adminRoutes = ['/dashboard/categories', '/dashboard/engines']
+  const adminRoutes = [
+    '/dashboard',
+    '/dashboard/categories',
+    '/dashboard/products',
+    '/profile',
+  ]
+
+  const userRoutes = [
+    '/dashboard',
+  ];
 
   if (token) {
     // if we have a token here, it is verified, we can now decode it using edge runtime compatible jwt-decode module.
@@ -25,10 +34,15 @@ export async function middleware(req: NextRequest) {
     if (!decodedJwt.role) {
       return NextResponse.redirect(new URL('/', req.url));
     }
-    if (
-      adminRoutes.some((adminroute) => req.nextUrl.pathname.startsWith(adminroute)) &&
-      decodedJwt.role !== 'admin'
-    ) {
+
+    let allowedRoutes: Array<string> = [];
+    if (decodedJwt.role === 'admin') {
+      allowedRoutes = adminRoutes;
+    } else if (decodedJwt.role === 'user') {
+      allowedRoutes = userRoutes;
+    }
+
+    if (!allowedRoutes.some((route) => req.nextUrl.pathname.startsWith(route))) {
       return NextResponse.redirect(new URL('/dashboard', req.url));
     }
   } else {
@@ -38,5 +52,8 @@ export async function middleware(req: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ['/dashboard/:path*'],
+  matcher: [
+    '/dashboard/:path*',
+    '/profile/:path*',
+  ],
 };

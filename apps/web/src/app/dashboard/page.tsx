@@ -13,6 +13,8 @@ import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { POSProduct } from 'types/POSProducts';
+import Vocal from '@untemps/react-vocal';
+import '@styles/vocal.css';
 
 function DashboardIndex() {
   const [prompt, setPrompt] = useState<string>('');
@@ -80,41 +82,34 @@ function DashboardIndex() {
   }
 
   const test = async () => {
-    if (!session?.user?.organization_id) return;
-    const r = await axios.post(
-      '/api/embeddings/similaritySearch',
-      {
-        prompt: prompt,
-        collection_name: `client_${session.user.organization_id}`
-      }
-    );
-    console.log(r);
   }
 
   return (
     <Flex>
       <Spacer />
       <Stack width={"50vw"} height={"80vh"} gap={5}>
-        <Textarea height={"60vh"} value={prompt} resize={"none"} onChange={handleChangePrompt} />
-        <Button height={'20vh'} onClick={() => generateOutput()}>Find it</Button>
+        <Textarea height={"63vh"} value={prompt} resize={"none"} onChange={handleChangePrompt} />
+        <Spacer />
+        <Vocal className={'Vocal'} onResult={(text) => setPrompt(text)} />
       </Stack>
       <Spacer />
       <Box width={"30vw"} height={"80vh"}>
         {
           displayedProducts.length === 0 ?
-            <Textarea fontSize={'sm'} value={completion} resize={"none"} width={"inherit"} height={"inherit"} readOnly={true} />
+            <Textarea fontSize={'sm'} value={completion} resize={"none"} width={"inherit"} height={"63vh"} readOnly={true} />
             :
-            <Flex flexDirection={'column'} gap={2}>
-              <Spacer />
+            <Flex flexDirection={'column'} align={'center'} gap={3} height={"63vh"}>
               {
                 displayedProducts.map(product => {
                   return <ProductCard product={product} />
                 })
               }
-              <Spacer />
             </Flex>
         }
+        <Spacer />
+        <Button mt={5} height={'15vh'} width={'inherit'} onClick={() => generateOutput()}>Find it</Button>
       </Box>
+      <Spacer />
     </Flex>
   );
 }

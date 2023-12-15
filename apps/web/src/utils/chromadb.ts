@@ -5,7 +5,7 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 interface Page {
   metadata: object,
   pageContent: string,
-  id: string
+  id: string // pretty much for updating
 }
 
 const MAX_CHUNK_SIZE = 1000;
@@ -20,7 +20,7 @@ export async function similaritySearch(
 ) {
   const embedder = new OllamaEmbeddings({
     baseUrl: process.env.OLLAMA_URL,
-    model: "llama2",
+    model: "mistral",
   });
 
   const vectorStore = await Chroma.fromExistingCollection(embedder, {
@@ -31,23 +31,8 @@ export async function similaritySearch(
     }
   });
 
-  const response = await vectorStore.similaritySearchWithScore(prompt, 2);
-  let similarItems = response;
-  if (response.length > 1) {
-    const [, score1] = response[0];
-    const [, score2] = response[1];
-
-    if (score2 - score1 > 0.05) {
-      similarItems = [response[0]];
-    } 
-  } 
-
-  // TODO: Change the formatted string below when we will add metadata
-  const output = similarItems.map(([doc, ]) => {
-    return doc.pageContent;
-  }).join("\n");
-
-  return output;
+  const response = await vectorStore.similaritySearchWithScore(prompt, 4);
+  return response;
 }
 
 export async function embedDocuments(
@@ -56,33 +41,35 @@ export async function embedDocuments(
 ) {
   const embedder = new OllamaEmbeddings({
     baseUrl: process.env.OLLAMA_URL,
-    model: "llama2",
+    model: "mistral",
   });
 
   const documents: any[] = [];
   const ids: any[] = [];
 
   // Preprocessing the data (spliting)
-  await Promise.all(await contents.map(async (page: Page) => {
-    if (page.pageContent.length <= MAX_CHUNK_SIZE && page.pageContent.length > 0) {
-      ids.push(page.id);
-      documents.push({
-        pageContent: page.pageContent,
-        metadata: page.metadata,
-      });
-    } else {
-      const splittedDoc = await splitter.splitText(page.pageContent);
-      splittedDoc.forEach((doc, index) => {
-        if (doc === "") return;
-
-        ids.push(page.id + index.toString());
+  await Promise.all(
+    contents.map(async (page: Page) => {
+      if (page.pageContent.length <= MAX_CHUNK_SIZE && page.pageContent.length > 0) {
+        ids.push(page.id);
         documents.push({
-          pageContent: doc,
+          pageContent: page.pageContent,
           metadata: page.metadata,
         });
-      })
-    }
-  }));
+      } else {
+        const splittedDoc = await splitter.splitText(page.pageContent);
+        splittedDoc.forEach((doc, index) => {
+          if (doc === "") return;
+
+          ids.push(page.id + index.toString());
+          documents.push({
+            pageContent: doc,
+            metadata: page.metadata,
+          });
+        })
+      }
+    })
+  );
 
   const vectorStore = await Chroma.fromExistingCollection(embedder, {
     url: process.env.CHROMADB_URL,

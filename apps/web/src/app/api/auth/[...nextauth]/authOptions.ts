@@ -37,7 +37,8 @@ export const authOptions: AuthOptions = {
             id: registerRes.id,
             email: registerRes.email,
             system_role: registerRes.system_role.name,
-            password_hash: registerRes.password_hash
+            password_hash: registerRes.password_hash,
+            organization_id: registerRes.organization_id
           }
           // if the user already exist, persist the id & role in the user object
         } else {
@@ -45,7 +46,8 @@ export const authOptions: AuthOptions = {
             id: queryUserRes.id,
             email: queryUserRes.email,
             system_role: queryUserRes.system_role.name,
-            password_hash: queryUserRes.password_hash
+            password_hash: queryUserRes.password_hash,
+            organization_id: queryUserRes.organization_id
           };
         }
 
@@ -76,6 +78,7 @@ export const authOptions: AuthOptions = {
       if (user) {
         token.id = user.id;
         token.role = user.system_role;
+        token.organization_id = user.organization_id;
       }
 
       if (token.id) {
@@ -98,6 +101,7 @@ export const authOptions: AuthOptions = {
         session.user.id = token.id;
         session.user.role = token.role;
         session.user.image = token.image;
+        session.user.organization_id = token.organization_id;
       }
       const encodedToken = jwt.sign(
         token as object,
@@ -124,6 +128,7 @@ export const authOptions: AuthOptions = {
         role: token?.role,
         name: token?.name,
         image: token?.image,
+        organization_id: token?.organization_id,
         profileCompleted: token?.profileCompleted,
         iat: Math.floor(Date.now() / 1000),
         exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
@@ -146,6 +151,7 @@ export const authOptions: AuthOptions = {
         role: decodedToken.role,
         name: decodedToken.name,
         image: decodedToken.image,
+        organization_id: decodedToken.organization_id,
         profileCompleted: decodedToken.profileCompleted,
         iat: decodedToken.iat,
         exp: decodedToken.exp,
@@ -176,6 +182,7 @@ async function queryUserByEmail({ email }: { email: string }) {
           id
           email
           password_hash
+          organization_id
           system_role {
             id
             name
@@ -213,6 +220,7 @@ async function queryUserByPk({ id }: { id: string }) {
           id
           email
           password_hash
+          organization_id
           system_role {
             id
             name

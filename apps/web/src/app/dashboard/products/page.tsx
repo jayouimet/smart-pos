@@ -42,7 +42,7 @@ const ProductsPage = () => {
   const [fields, setFields] = useState([
     {
       name: 'name',
-      defaultValue: 'test',
+      defaultValue: '',
       label: 'Name',
       type: ChakraInputEnum.Input,
       placeHolder: 'Name',
@@ -162,8 +162,6 @@ const ProductsPage = () => {
   }
 
   const onUpdateSubmitCallback = (product: any) => {
-    console.log(product);
-
     let gqlProduct = {
       name: product?.name,
       description: product?.description,
@@ -207,7 +205,6 @@ const ProductsPage = () => {
   }
 
   const onInsertSubmitCallback = (product: any) => {
-    console.log(product);
     let gqlProduct = {
       name: product?.name,
       description: product?.description,
@@ -284,7 +281,7 @@ const ProductsPage = () => {
         </CardHeader>
         <CardBody>
           <Stack>
-            <Flex w={'100%'} direction={'row-reverse'}>
+            <Flex pr={5} w={'100%'} direction={'row-reverse'}>
               <Button minWidth={'90px'} onClick={handleAdd}>Add</Button>
             </Flex>
             <DataTable 

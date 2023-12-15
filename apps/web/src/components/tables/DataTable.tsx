@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from "react";
-import { Table, Thead, Tbody, Tr, Th, Td, chakra, Button, Stack } from "@chakra-ui/react";
+import { Table, Box, Text, Flex, Thead, Tbody, Tr, Th, Td, chakra, Button, Stack } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import {
   useReactTable,
@@ -78,8 +78,11 @@ function DataTable<Data extends object>({
             })}
             {handleEdit && handleDelete &&
               <Th>
-                Action
-              </Th>}
+                <Flex w={'100%'} direction={'row'}>
+                  <Text ml={'auto'}>Action</Text>
+                </Flex>
+              </Th>
+            }
           </Tr>
         ))}
       </Thead>
@@ -98,19 +101,21 @@ function DataTable<Data extends object>({
             {
               (handleEdit || handleDelete || handleDisplay) &&
               <Td>
-                <Stack direction={"row"}>
-                  {
-                    handleDisplay &&
-                    <Button isDisabled={isDisabledShow && isDisabledShow(row.original)} colorScheme="white" onClick={() => handleDisplay(row.original)}>Show</Button>
-                  }
-                  { 
-                    handleEdit &&
-                    <Button isDisabled={isDisabledEdit && isDisabledEdit(row.original)} onClick={() => handleEdit(row.original)}>Edit</Button>
-                  }
-                  {
-                    handleDelete &&
-                    <Button isDisabled={isDisabledDelete && isDisabledDelete(row.original)} colorScheme="red" onClick={() => handleDelete(row.original)}>Delete</Button>
-                  }
+                <Stack direction={"row"} ml={'auto'} minWidth={'fit-content'} w={'100%'}>
+                  <Stack direction={"row"} ml={'auto'}>
+                    {
+                      handleDisplay &&
+                      <Button isDisabled={isDisabledShow && isDisabledShow(row.original)} colorScheme="white" onClick={() => handleDisplay(row.original)}>Show</Button>
+                    }
+                    { 
+                      handleEdit &&
+                      <Button isDisabled={isDisabledEdit && isDisabledEdit(row.original)} onClick={() => handleEdit(row.original)}>Edit</Button>
+                    }
+                    {
+                      handleDelete &&
+                      <Button isDisabled={isDisabledDelete && isDisabledDelete(row.original)} colorScheme="red" onClick={() => handleDelete(row.original)}>Delete</Button>
+                    }
+                  </Stack>
                 </Stack>
               </Td>}
           </Tr>

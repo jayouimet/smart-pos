@@ -24,11 +24,25 @@ export const GET_CATEGORIES = gql`
 /*--------------------------     INSERTIONS    -------------------------------*/
 ////////////////////////////////////////////////////////////////////////////////
 
+export const INSERT_CATEGORY = gql`
+  mutation insertCategory ($data: categories_insert_input!) {
+    insert_categories_one(object: $data) {
+      id
+    }
+  }
+`
 
 ////////////////////////////////////////////////////////////////////////////////
 /*----------------------------     UPDATES    --------------------------------*/
 ////////////////////////////////////////////////////////////////////////////////
 
+export const UPDATE_CATEGORY = gql`
+  mutation updateCategory ($id: uuid!, $data: categories_set_input!) {
+    update_categories_by_pk (pk_columns: { id: $id }, _set: $data) {
+      id
+    }
+  }
+`
 
 ////////////////////////////////////////////////////////////////////////////////
 /*---------------------------     DELETIONS    -------------------------------*/

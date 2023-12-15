@@ -10,8 +10,8 @@ import { ApolloWrapper } from '@contexts/ApolloWrapper';
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'SGP',
-  description: 'Système de gestion de pompes',
+  title: 'Smart-POS',
+  description: 'Smart POS',
 }
 
 // This is the root layout of the application. All route share this same layout.

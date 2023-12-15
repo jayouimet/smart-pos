@@ -166,7 +166,7 @@ const ProductsPage = () => {
       name: product?.name,
       description: product?.description,
       price: product?.price,
-      organization_id: '4acee442-b87a-4c94-ac03-144f56a67fe0',
+      organization_id: session?.user.organization_id,
       location: product?.location
     }
 
@@ -209,7 +209,7 @@ const ProductsPage = () => {
       name: product?.name,
       description: product?.description,
       price: product?.price,
-      organization_id: '4acee442-b87a-4c94-ac03-144f56a67fe0',
+      organization_id: session?.user.organization_id,
       location: product?.location,
       product_categories: {
         data: product.categories.map((cat) => {

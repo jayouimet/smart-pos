@@ -100,32 +100,31 @@ function DashboardIndex() {
           {'Dashboard'}
         </Text>
       </Flex>
-      <Flex>
-        <Spacer />
-        <Stack width={"50vw"} height={"80vh"} gap={5}>
-          <Textarea height={"63vh"} value={prompt} resize={"none"} onChange={handleChangePrompt} />
-          <Spacer />
-          <Vocal className={'Vocal'} onResult={(text) => setPrompt(text)} />
-        </Stack>
-        <Spacer />
-        <Box width={"30vw"} height={"80vh"}>
+      <Stack>
+        <Flex width={'100%'} direction={'row'}>
+          <Textarea mr={3} width={'60%'} height={"63vh"} value={prompt} resize={"none"} onChange={handleChangePrompt} />
           {
             displayedProducts.length === 0 ?
-              <Textarea fontSize={'sm'} value={completion} resize={"none"} width={"inherit"} height={"63vh"} readOnly={true} />
-              :
-              <Flex flexDirection={'column'} align={'center'} gap={3} height={"63vh"}>
-                {
-                  displayedProducts.map(product => {
-                    return <ProductCard product={product} />
-                  })
-                }
-              </Flex>
+            <Textarea ml={3} width={'40%'} fontSize={'sm'} value={completion} resize={"none"} height={"63vh"} readOnly={true} />
+            :
+            <Flex ml={3} width={'40%'} flexDirection={'column'} align={'center'} gap={3} height={"63vh"}>
+              {
+                displayedProducts.map(product => {
+                  return <ProductCard product={product} />
+                })
+              }
+            </Flex>
           }
-          <Spacer />
-          <Button mt={5} height={'15vh'} width={'inherit'} onClick={() => generateOutput()}>Find it</Button>
-        </Box>
-        <Spacer />
-      </Flex>
+        </Flex>
+        <Flex width={'100%'} direction={'row'}>
+          <Box mr={3} width={'60%'} maxWidth={'60%'}>
+            <Box m={'auto'} mt={6} width={'100px'}>
+              <Vocal className={'Vocal'} onResult={(text) => setPrompt(text)} />
+            </Box>
+          </Box>
+          <Button ml={3} width={'40%'} maxWidth={'40%'} mt={5} height={'15vh'} onClick={() => generateOutput()}>Find it</Button>
+        </Flex>
+      </Stack>
     </>
   );
 }

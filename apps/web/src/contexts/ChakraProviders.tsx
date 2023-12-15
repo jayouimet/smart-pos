@@ -11,6 +11,7 @@ import Textarea from '@components/base/Textarea';
 import FormLabel from '@components/base/FormLabel';
 import Modal from '@components/base/Modal';
 import Link from '@components/base/Link';
+import '@fontsource/montserrat';
 
 const config: ThemeConfig = {
   initialColorMode: 'dark',
@@ -19,6 +20,10 @@ const config: ThemeConfig = {
 
 const theme = extendTheme({
   config,
+  fonts: {
+    heading: `'Montserrat', sans-serif`,
+    body: `'Montserrat', sans-serif`,
+  },
   styles: {
     global: {
       body: {
@@ -32,6 +37,7 @@ const theme = extendTheme({
       // custom color palette for sparkr
       bg: {
         main: '#1F1F22',
+        primary: '#332929',
         secondary: 'rgba(255, 255, 255, 0.30)',
       },
       alpha: {

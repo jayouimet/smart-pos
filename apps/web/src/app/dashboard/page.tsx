@@ -4,7 +4,10 @@ import {
   Box,
   Button,
   Flex,
-  Spacer, Stack, Textarea
+  Spacer, 
+  Stack, 
+  Textarea, 
+  Text
 } from '@chakra-ui/react';
 import { ProductCard } from '@components/products/ProductCard';
 import { generateOllama } from '@utils/ollama';
@@ -85,32 +88,45 @@ function DashboardIndex() {
   }
 
   return (
-    <Flex>
-      <Spacer />
-      <Stack width={"50vw"} height={"80vh"} gap={5}>
-        <Textarea height={"63vh"} value={prompt} resize={"none"} onChange={handleChangePrompt} />
+    <>
+      <Flex
+        justify={'space-between'}
+        align={{ base: 'flex-start', md: 'center' }}
+        direction={{ base: 'column-reverse', md: 'row' }}
+        gap={{ base: 3, md: 6 }}
+        mb={4}
+      >
+        <Text fontSize={'5xl'} fontWeight="bold">
+          {'Dashboard'}
+        </Text>
+      </Flex>
+      <Flex>
         <Spacer />
-        <Vocal className={'Vocal'} onResult={(text) => setPrompt(text)} />
-      </Stack>
-      <Spacer />
-      <Box width={"30vw"} height={"80vh"}>
-        {
-          displayedProducts.length === 0 ?
-            <Textarea fontSize={'sm'} value={completion} resize={"none"} width={"inherit"} height={"63vh"} readOnly={true} />
-            :
-            <Flex flexDirection={'column'} align={'center'} gap={3} height={"63vh"}>
-              {
-                displayedProducts.map(product => {
-                  return <ProductCard product={product} />
-                })
-              }
-            </Flex>
-        }
+        <Stack width={"50vw"} height={"80vh"} gap={5}>
+          <Textarea height={"63vh"} value={prompt} resize={"none"} onChange={handleChangePrompt} />
+          <Spacer />
+          <Vocal className={'Vocal'} onResult={(text) => setPrompt(text)} />
+        </Stack>
         <Spacer />
-        <Button mt={5} height={'15vh'} width={'inherit'} onClick={() => generateOutput()}>Find it</Button>
-      </Box>
-      <Spacer />
-    </Flex>
+        <Box width={"30vw"} height={"80vh"}>
+          {
+            displayedProducts.length === 0 ?
+              <Textarea fontSize={'sm'} value={completion} resize={"none"} width={"inherit"} height={"63vh"} readOnly={true} />
+              :
+              <Flex flexDirection={'column'} align={'center'} gap={3} height={"63vh"}>
+                {
+                  displayedProducts.map(product => {
+                    return <ProductCard product={product} />
+                  })
+                }
+              </Flex>
+          }
+          <Spacer />
+          <Button mt={5} height={'15vh'} width={'inherit'} onClick={() => generateOutput()}>Find it</Button>
+        </Box>
+        <Spacer />
+      </Flex>
+    </>
   );
 }
 

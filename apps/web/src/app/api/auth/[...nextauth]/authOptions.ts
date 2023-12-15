@@ -134,7 +134,7 @@ export const authOptions: AuthOptions = {
         exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
         'https://hasura.io/jwt/claims': {
           'x-hasura-allowed-roles': ['user', 'anonymous', 'admin'],
-          'x-hasura-default-role': token?.system_role,
+          'x-hasura-default-role': token?.role,
           'x-hasura-user-id': token?.id,
           // "x-hasura-allowed-organizations": token?.org_ids,
         },

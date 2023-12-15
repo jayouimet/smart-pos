@@ -9,6 +9,8 @@
     "type-check": "tsc"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.8",
+    "@apollo/experimental-nextjs-app-support": "^0.5.2",
     "@chakra-ui/icons": "^2.1.1",
     "@chakra-ui/next-js": "^2.1.5",
     "@chakra-ui/react": "^2.8.1",
@@ -16,8 +18,10 @@
     "@coreui/icons-react": "^2.2.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@fontsource/montserrat": "^5.0.16",
     "@nanostores/react": "ai/react",
     "@untemps/react-vocal": "^1.7.22",
+    "@tanstack/react-table": "^8.10.7",
     "ai": "^2.2.12",
     "axios": "^1.5.0",
     "bcrypt": "^5.1.1",
@@ -27,6 +31,8 @@
     "encoding": "^0.1.13",
     "formik": "^2.4.5",
     "framer-motion": "^10.16.4",
+    "graphql": "^16.8.1",
+    "graphql-ws": "^5.14.2",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "langchain": "^0.0.153",

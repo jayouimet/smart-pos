@@ -11,7 +11,7 @@ import {
   FlexProps,
   Stack,
 } from '@chakra-ui/react';
-import { FiHome, FiLayers, FiLogOut, FiCpu } from 'react-icons/fi';
+import { FiHome, FiLayers, FiLogOut, FiCpu, FiBox } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
@@ -59,17 +59,17 @@ interface DashboardSidebarProps extends BoxProps {
 }
 
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Home', icon: FiHome, href: '/', minRole: UserRole.USER },
+  { name: 'Home', icon: FiHome, href: '/dashboard', minRole: UserRole.USER },
   {
-    name: 'Engines',
-    icon: FiCpu,
-    href: '/engines',
+    name: 'Products',
+    icon: FiBox,
+    href: '/dashboard/products',
     minRole: UserRole.ADMIN,
   },
   {
     name: 'Categories',
     icon: FiLayers,
-    href: '/categories',
+    href: '/dashboard/categories',
     minRole: UserRole.ADMIN,
   },
 ];
@@ -374,7 +374,7 @@ const DashboardSidebar = ({ children, ...rest }: DashboardSidebarProps) => {
       />
       <Box
         ml={{ base: 0, md: '80px', xl: '88px' }}
-        p={{ base: 3, xl: 5 }}
+        px={{ base: 3, xl: 5 }}
         position={'relative'}
       >
         {isOpenModal && (

@@ -11,7 +11,7 @@ const Modal = defineMultiStyleConfig({
   // The styles all button have in common
   baseStyle: {
     dialog: {
-      bg: 'brand.primary.red.600',
+      bg: 'brand.bg.primary',
       borderRadius: 20,
       mx: 3,
     },

@@ -53,19 +53,19 @@ export default function Signin() {
               w={320}
             >
               <Input 
-                name="email" 
-                placeholder='Email' 
+                name={"email"}
+                placeholder={'Email'} 
                 onChange={formik.handleChange}
                 value={formik.values.email
               }/>
               <Input 
-                name="password"
-                type="password"
-                placeholder='Password'
+                name={"password"}
+                type={"password"}
+                placeholder={'Password'}
                 onChange={formik.handleChange}
                 value={formik.values.password}
               />
-              <Button type="submit">Submit</Button>
+              <Button type={"submit"}>Submit</Button>
             </Stack>
           </form>
           <Center>

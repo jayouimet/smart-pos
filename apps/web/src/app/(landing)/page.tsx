@@ -20,8 +20,8 @@ const HomePage = () => {
         <Box h={'6vh'} mb={6} pos={'relative'}>
           <Center>
             <Stack>
-              <Button variant={'solid'} onClick={() => { router.push('/auth/signin') }}>Login</Button>
-              <Button variant={'solid'} onClick={() => { router.push('/auth/register') }}>Register</Button>
+              <Button onClick={() => { router.push('/auth/signin') }}>Login</Button>
+              <Button onClick={() => { router.push('/auth/register') }}>Register</Button>
             </Stack>
           </Center>
         </Box>

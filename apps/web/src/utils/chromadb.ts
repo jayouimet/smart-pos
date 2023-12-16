@@ -1,6 +1,6 @@
-import { OllamaEmbeddings } from "langchain/embeddings/ollama";
-import { Chroma } from "langchain/vectorstores/chroma";
+import { HuggingFaceTransformersEmbeddings } from "langchain/embeddings/hf_transformers";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { Chroma } from "langchain/vectorstores/chroma";
 
 interface Page {
   metadata: object,
@@ -14,14 +14,16 @@ const splitter = new RecursiveCharacterTextSplitter({
   chunkOverlap: 200
 });
 
+export const embedder = new HuggingFaceTransformersEmbeddings({
+  modelName: "Xenova/all-MiniLM-L6-v2",
+});
+
 export async function similaritySearch(
   prompt: string,
   collection_name: string
 ) {
-  const embedder = new OllamaEmbeddings({
-    baseUrl: process.env.OLLAMA_URL,
-    model: "mistral",
-  });
+  // Get the classification pipeline. When called for the first time,
+  // this will load the pipeline and cache it for future use.
 
   const vectorStore = await Chroma.fromExistingCollection(embedder, {
     url: process.env.CHROMADB_URL,
@@ -30,7 +32,6 @@ export async function similaritySearch(
       'hnsw:space': 'cosine'
     }
   });
-
   const response = await vectorStore.similaritySearchWithScore(prompt, 4);
   return response;
 }
@@ -39,11 +40,6 @@ export async function embedDocuments(
   contents: Page[],
   collection_name: string
 ) {
-  const embedder = new OllamaEmbeddings({
-    baseUrl: process.env.OLLAMA_URL,
-    model: "mistral",
-  });
-
   const documents: any[] = [];
   const ids: any[] = [];
 
@@ -70,7 +66,6 @@ export async function embedDocuments(
       }
     })
   );
-
   const vectorStore = await Chroma.fromExistingCollection(embedder, {
     url: process.env.CHROMADB_URL,
     collectionName: collection_name,
@@ -78,11 +73,8 @@ export async function embedDocuments(
       'hnsw:space': 'cosine'
     }
   });
-
-  // Add the data to the collection
   await vectorStore.addDocuments(documents, {
-    ids: ids
+    ids: ids,
   });
-
   return true;
 }

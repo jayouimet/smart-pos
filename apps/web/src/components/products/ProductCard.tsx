@@ -1,5 +1,5 @@
 import { Box, Flex, Spacer, Text } from "@chakra-ui/react";
-import Product from "types/products/Product";
+import Product from "@type/products/Product";
 
 interface ProductCardProps {
   product: Product;

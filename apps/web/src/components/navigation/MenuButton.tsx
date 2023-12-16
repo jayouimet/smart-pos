@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 import { signOut } from 'next-auth/react';
 import { Fragment } from 'react';
 import { FiLogOut } from 'react-icons/fi';
-import { SystemRoles } from 'types/roles/SystemRoles';
+import { SystemRoles } from '@type/roles/SystemRoles';
 
 interface MenuButtonProps extends BoxProps {
   LinkItems: Array<LinkItemProps>;

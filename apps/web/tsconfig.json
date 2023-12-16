@@ -30,7 +30,7 @@
       "@components/*": ["components/*"],
       "@assets/*": ["assets/*"],
       "@utils/*": ["utils/*"],
-      "@types/*": ["types/*"]
+      "@type/*": ["types/*"]
     }
   },
   "include": [

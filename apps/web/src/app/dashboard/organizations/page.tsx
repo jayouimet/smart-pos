@@ -9,8 +9,8 @@ import DataTable from "@components/tables/DataTable";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import Category from "types/categories/Category";
-import Organization from "types/organizations/Organization";
+import Category from "@type/categories/Category";
+import Organization from "@type/organizations/Organization";
 
 const columnHelper = createColumnHelper<Category>();
 

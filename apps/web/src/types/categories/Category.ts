@@ -1,4 +1,4 @@
-import Product from 'types/products/Product';
+import Product from '@type/products/Product';
 
 export default interface Category {
   id?: string;

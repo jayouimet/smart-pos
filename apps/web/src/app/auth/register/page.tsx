@@ -8,7 +8,7 @@ import { ChangeEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { GET_ORGANIZATIONS } from '@app/gql/organizations';
 import { useQuery } from '@apollo/client';
-import Organization from 'types/organizations/Organization';
+import Organization from '@type/organizations/Organization';
 import SelectOption from '@components/base/SelectOption';
 
 type RegisterInputs = {

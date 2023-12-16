@@ -11,7 +11,7 @@ import {
   FlexProps,
   Stack,
 } from '@chakra-ui/react';
-import { FiHome, FiLayers, FiLogOut, FiCpu, FiBox } from 'react-icons/fi';
+import { FiHome, FiLayers, FiUsers, FiLogOut, FiCpu, FiBox } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
@@ -19,18 +19,13 @@ import { signOut } from 'next-auth/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/navigation';
 import MenuButton from '@components/navigation/MenuButton';
-
-export enum UserRole {
-  ADMIN = 'admin',
-  USER = 'user',
-  MEMBER = 'member',
-}
+import { SystemRoles } from 'types/roles/SystemRoles';
 
 export interface LinkItemProps {
   name: string;
   icon: IconType;
   href: string;
-  minRole: UserRole;
+  minRole: SystemRoles;
 }
 
 interface NavItemProps extends FlexProps {
@@ -59,18 +54,29 @@ interface DashboardSidebarProps extends BoxProps {
 }
 
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Home', icon: FiHome, href: '/dashboard', minRole: UserRole.USER },
+  { 
+    name: 'Home', 
+    icon: FiHome, 
+    href: '/dashboard', 
+    minRole: SystemRoles.USER 
+  },
+  {
+    name: 'Organizations',
+    icon: FiUsers,
+    href: '/dashboard/organizations',
+    minRole: SystemRoles.ADMIN,
+  },
   {
     name: 'Products',
     icon: FiBox,
     href: '/dashboard/products',
-    minRole: UserRole.ADMIN,
+    minRole: SystemRoles.ADMIN,
   },
   {
     name: 'Categories',
     icon: FiLayers,
     href: '/dashboard/categories',
-    minRole: UserRole.ADMIN,
+    minRole: SystemRoles.ADMIN,
   },
 ];
 
@@ -121,9 +127,9 @@ const SidebarContent = ({
 
           {LinkItems.map((link) => {
             if (
-              (link.minRole === UserRole.ADMIN &&
-                session?.user.role === UserRole.ADMIN) ||
-              link.minRole === UserRole.USER
+              (link.minRole === SystemRoles.ADMIN &&
+                session?.user.role === SystemRoles.ADMIN) ||
+              link.minRole === SystemRoles.USER
             )
               return (
                 <Box

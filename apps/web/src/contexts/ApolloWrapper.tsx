@@ -24,12 +24,14 @@ function makeClient(session: any) {
     },
   }));
 
+  console.log(session);
+
   const httpLink = new HttpLink({
     uri: process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ENDPOINT,
     fetchOptions: { cache: "no-store" },
-    headers: {
-      "authorization": session?.token ? `Bearer ${session.token}` : ""
-    }
+    headers: session?.token ? {
+      "authorization": `Bearer ${session.token}` 
+    } : {}
   })
 
   const splitLink = split(

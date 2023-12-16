@@ -2,12 +2,12 @@ import { Box, BoxProps, Flex, Grid, GridItem } from '@chakra-ui/react';
 import {
   LinkItemProps,
   NavItem,
-  UserRole,
 } from '@components/navigation/DashboardSidebar';
 import { useSession } from 'next-auth/react';
 import { signOut } from 'next-auth/react';
 import { Fragment } from 'react';
 import { FiLogOut } from 'react-icons/fi';
+import { SystemRoles } from 'types/roles/SystemRoles';
 
 interface MenuButtonProps extends BoxProps {
   LinkItems: Array<LinkItemProps>;
@@ -98,9 +98,9 @@ const MenuButton = ({
           >
             {LinkItems.map((link: any) => {
               if (
-                (link.minRole === UserRole.ADMIN &&
-                  session?.user.role === UserRole.ADMIN) ||
-                link.minRole === UserRole.USER
+                (link.minRole === SystemRoles.ADMIN &&
+                  session?.user.role === SystemRoles.ADMIN) ||
+                link.minRole === SystemRoles.USER
               )
                 return (
                   <Box

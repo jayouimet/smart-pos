@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery } from "@apollo/client";
 import { DELETE_CATEGORY, GET_CATEGORIES, INSERT_CATEGORY, UPDATE_CATEGORY } from "@app/gql/categories";
+import { DELETE_ORGANIZATION, GET_ORGANIZATIONS, INSERT_ORGANIZATION, UPDATE_ORGANIZATION } from "@app/gql/organizations";
 import { Button, Card, CardBody, CardHeader, Flex, Heading, Stack, Text } from "@chakra-ui/react";
 import UpsertModal, { ChakraInputEnum } from "@components/modals/UpsertModal";
 import DataTable from "@components/tables/DataTable";
@@ -9,6 +10,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import Category from "types/categories/Category";
+import Organization from "types/organizations/Organization";
 
 const columnHelper = createColumnHelper<Category>();
 
@@ -19,7 +21,7 @@ const columns = [
   }),
 ];
 
-const CategoriesPage = () => {
+const OrganizationsPage = () => {
   const { data: session } = useSession();
 
   const [fields, setFields] = useState([
@@ -44,35 +46,35 @@ const CategoriesPage = () => {
     name: '',
   })
 
-  const { data, loading, error, refetch } = useQuery(GET_CATEGORIES, {
+  const { data, loading, error, refetch } = useQuery(GET_ORGANIZATIONS, {
     variables: {
       where: {}
     },
     fetchPolicy: 'no-cache',
   });
 
-  const [insertCategory] = useMutation(INSERT_CATEGORY);
-  const [updateCategory] = useMutation(UPDATE_CATEGORY);
-  const [deleteCategory] = useMutation(DELETE_CATEGORY);
+  const [insertOrganization] = useMutation(INSERT_ORGANIZATION);
+  const [updateOrganization] = useMutation(UPDATE_ORGANIZATION);
+  const [deleteOrganization] = useMutation(DELETE_ORGANIZATION);
 
-  const handleDelete = (category: Category) => {
-    deleteCategory({
+  const handleDelete = (organization: Organization) => {
+    deleteOrganization({
       variables: {
-        id: category.id
+        id: organization.id
       },
       onCompleted: refetch
     });
   }
 
-  const onUpdateSubmitCallback = (category: any) => {
-    let gqlCategory = {
-      name: category?.name,
+  const onUpdateSubmitCallback = (organization: any) => {
+    let gqlOrganization = {
+      name: organization?.name,
     }
 
-    updateCategory({
+    updateOrganization({
       variables: {
-        id: category.id,
-        data: gqlCategory
+        id: organization.id,
+        data: gqlOrganization
       },
       onCompleted: refetch
     });
@@ -80,14 +82,14 @@ const CategoriesPage = () => {
     handleClose();
   }
 
-  const onInsertSubmitCallback = (category: any) => {
-    let gqlCategory = {
-      name: category?.name,
+  const onInsertSubmitCallback = (organization: any) => {
+    let gqlOrganization = {
+      name: organization?.name,
     }
 
-    insertCategory({
+    insertOrganization({
       variables: {
-        data: gqlCategory
+        data: gqlOrganization
       },
       onCompleted: refetch
     });
@@ -95,11 +97,11 @@ const CategoriesPage = () => {
     handleClose();
   }
 
-  const handleEdit = (category: Category) => {
+  const handleEdit = (organization: Organization) => {
     setOnSubmitCallback(() => onUpdateSubmitCallback);
     setInitialValues({
-      id: category.id,
-      name: category.name,
+      id: organization.id,
+      name: organization.name,
     });
     setIsModalOpen(true);
   }
@@ -117,7 +119,7 @@ const CategoriesPage = () => {
     setIsModalOpen(false);
   }
 
-  const [onSubmitCallback, setOnSubmitCallback] = useState<(category: any) => void>(() => onInsertSubmitCallback);
+  const [onSubmitCallback, setOnSubmitCallback] = useState<(organization: any) => void>(() => onInsertSubmitCallback);
 
   return (
     <Flex direction={'column'} h={'100vh'} py={3}>
@@ -145,7 +147,7 @@ const CategoriesPage = () => {
               handleEdit={data => handleEdit(data)} 
               handleDelete={data => handleDelete(data)} 
               columns={columns} 
-              data={loading ? [] : data.categories} 
+              data={loading ? [] : data.organizations} 
             />
           </Stack>
         </CardBody>
@@ -164,4 +166,4 @@ const CategoriesPage = () => {
   );
 }
 
-export default CategoriesPage;
+export default OrganizationsPage;

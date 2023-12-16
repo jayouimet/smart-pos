@@ -4,9 +4,9 @@ import { gql } from "@apollo/client";
 /*----------------------------     QUERIES    --------------------------------*/
 ////////////////////////////////////////////////////////////////////////////////
 
-export const GET_CATEGORIES = gql`
-  query getCategories ($where: categories_bool_exp!) {
-    categories (
+export const GET_ORGANIZATIONS = gql`
+  query getOrganizations ($where: organizations_bool_exp!) {
+    organizations (
       where: $where,
       order_by: {
         name: asc
@@ -24,9 +24,9 @@ export const GET_CATEGORIES = gql`
 /*--------------------------     INSERTIONS    -------------------------------*/
 ////////////////////////////////////////////////////////////////////////////////
 
-export const INSERT_CATEGORY = gql`
-  mutation insertCategory ($data: categories_insert_input!) {
-    insert_categories_one(object: $data) {
+export const INSERT_ORGANIZATION = gql`
+  mutation insertOrganization ($data: organizations_insert_input!) {
+    insert_organizations_one(object: $data) {
       id
     }
   }
@@ -36,9 +36,9 @@ export const INSERT_CATEGORY = gql`
 /*----------------------------     UPDATES    --------------------------------*/
 ////////////////////////////////////////////////////////////////////////////////
 
-export const UPDATE_CATEGORY = gql`
-  mutation updateCategory ($id: uuid!, $data: categories_set_input!) {
-    update_categories_by_pk (pk_columns: { id: $id }, _set: $data) {
+export const UPDATE_ORGANIZATION = gql`
+  mutation updateOrganization ($id: uuid!, $data: organizations_set_input!) {
+    update_organizations_by_pk (pk_columns: { id: $id }, _set: $data) {
       id
     }
   }
@@ -48,9 +48,9 @@ export const UPDATE_CATEGORY = gql`
 /*---------------------------     DELETIONS    -------------------------------*/
 ////////////////////////////////////////////////////////////////////////////////
 
-export const DELETE_CATEGORY = gql`
-  mutation deleteCategory ($id: uuid!) {
-    delete_categories_by_pk (id: $id) {
+export const DELETE_ORGANIZATION = gql`
+  mutation deleteOrganization ($id: uuid!) {
+    delete_organizations_by_pk (id: $id) {
       id
     }
   }

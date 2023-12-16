@@ -31,7 +31,7 @@
       "@components/*": ["components/*"],
       "@assets/*": ["assets/*"],
       "@utils/*": ["utils/*"],
-      "@pos_types/*": ["types/*"]
+      "@pos_types/*": ["pos_types/*"]
     }
   },
   "include": [

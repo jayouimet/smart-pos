@@ -1,8 +1,8 @@
 import { Box, Flex, Spacer, Text } from "@chakra-ui/react";
-import { POSProduct } from "types/POSProducts";
+import Product from "types/products/Product";
 
 interface ProductCardProps {
-  product: POSProduct;
+  product: Product;
 }
 
 function ProductCard(props: ProductCardProps) {

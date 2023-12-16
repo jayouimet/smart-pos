@@ -19,7 +19,7 @@ import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { gql, useMutation } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 import { GET_USER } from '@app/gql/users';
-import User from 'types/users/User';
+import User from '@type/users/User';
 
 const SAVE_PROFILE = gql`
   mutation mutationUpdateProfile(

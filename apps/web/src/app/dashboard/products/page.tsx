@@ -10,8 +10,8 @@ import { createColumnHelper } from "@tanstack/react-table";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import Category from "types/categories/Category";
-import Product from "types/products/Product";
+import Category from "@type/categories/Category";
+import Product from "@type/products/Product";
 
 const columnHelper = createColumnHelper<Product>();
 

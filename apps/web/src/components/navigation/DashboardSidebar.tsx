@@ -19,7 +19,7 @@ import { signOut } from 'next-auth/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/navigation';
 import MenuButton from '@components/navigation/MenuButton';
-import { SystemRoles } from 'types/roles/SystemRoles';
+import { SystemRoles } from '@type/roles/SystemRoles';
 
 export interface LinkItemProps {
   name: string;

@@ -31,12 +31,14 @@ export const authOptions: AuthOptions = {
             password_hash: password_hash,
             first_name: credentials.first_name,
             last_name: credentials.last_name,
+            organization_id: credentials.organization_id,
           });
 
           user = {
             id: registerRes.id,
             email: registerRes.email,
             system_role: registerRes.system_role.name,
+            organization_role: registerRes.organization_role.name,
             password_hash: registerRes.password_hash,
             organization_id: registerRes.organization_id
           }
@@ -46,6 +48,7 @@ export const authOptions: AuthOptions = {
             id: queryUserRes.id,
             email: queryUserRes.email,
             system_role: queryUserRes.system_role.name,
+            organization_role: queryUserRes.organization_role.name,
             password_hash: queryUserRes.password_hash,
             organization_id: queryUserRes.organization_id
           };
@@ -69,6 +72,7 @@ export const authOptions: AuthOptions = {
         action: { label: "Action", type: "text", placeholder: "Action" },
         first_name: { label: "First name", type: "text", placeholder: "First name" },
         last_name: { label: "Last name", type: "text", placeholder: "Last name" },
+        organization_id: { label: "Organization ID", type: "text", placeholder: "Organization ID" },
       }
     })
   ],
@@ -78,6 +82,7 @@ export const authOptions: AuthOptions = {
       if (user) {
         token.id = user.id;
         token.role = user.system_role;
+        token.organization_role = user.organization_role;
         token.organization_id = user.organization_id;
       }
 
@@ -99,6 +104,7 @@ export const authOptions: AuthOptions = {
       if (session?.user) {
         session.user.id = token.id;
         session.user.role = token.role;
+        session.user.organization_role = token.organization_role;
         session.user.image = token.image;
         session.user.organization_id = token.organization_id;
       }
@@ -125,6 +131,7 @@ export const authOptions: AuthOptions = {
       const jwtClaims = {
         id: token?.id,
         role: token?.role,
+        organization_role: token?.organization_role,
         name: token?.name,
         image: token?.image,
         organization_id: token?.organization_id,
@@ -133,6 +140,7 @@ export const authOptions: AuthOptions = {
         'https://hasura.io/jwt/claims': {
           'x-hasura-allowed-roles': ['user', 'anonymous', 'admin'],
           'x-hasura-default-role': token?.role,
+          'x-hasura-organization-role': token?.organization_role,
           'x-hasura-user-id': token?.id,
           // "x-hasura-allowed-organizations": token?.org_ids,
         },
@@ -180,6 +188,10 @@ async function queryUserByEmail({ email }: { email: string }) {
           email
           password_hash
           organization_id
+          organization_role {
+            id
+            name
+          }
           system_role {
             id
             name
@@ -249,11 +261,13 @@ async function registerUser({
   password_hash,
   first_name,
   last_name,
+  organization_id,
 }: {
   email: string;
   password_hash: string;
   first_name: string;
   last_name: string;
+  organization_id: string;
 }) {
   const roleQuery = `
       query roleQuery(
@@ -270,6 +284,21 @@ async function registerUser({
       }
     `;
 
+  const organizationRoleQuery = `
+    query organizationRoleQuery(
+      $role: String!,
+    ) {
+      organization_roles (
+        where: {
+          name: { _eq: $role}
+        }
+      ) {
+        id
+        name
+      }
+    }
+  `;
+
   const registerMutation = `
       mutation registerMutation($user: users_insert_input!) {
         insert_users(objects: [$user]) {
@@ -277,6 +306,10 @@ async function registerUser({
                 id
                 email
                 password_hash
+                organization_role {
+                  id
+                  name
+                }
                 system_role {
                     id
                     name
@@ -303,6 +336,23 @@ async function registerUser({
 
   const role_id = result_role.data.data.system_roles[0].id;
 
+  const orgRoleGraphqlQuery = {
+    operationName: 'organizationRoleQuery',
+    query: organizationRoleQuery,
+    variables: { role: 'member' },
+  };
+
+  const result_org_role = await axios.request({
+    ...config.gqlConfig.options,
+    data: orgRoleGraphqlQuery,
+  });
+
+  if (!result_org_role?.data?.data || result_org_role?.data?.data?.organization_roles?.length == 0) {
+    throw new Error('Member role not found');
+  }
+
+  const org_role_id = result_role.data.data.organization_roles[0].id;
+
   const graphqlMutation = {
     operationName: 'registerMutation',
     query: registerMutation,
@@ -313,6 +363,8 @@ async function registerUser({
         first_name: first_name,
         last_name: last_name,
         system_role_id: role_id,
+        organization_role_id: org_role_id,
+        organization_id: organization_id,
       },
     },
   };

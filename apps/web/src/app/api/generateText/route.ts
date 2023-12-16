@@ -1,6 +1,6 @@
 import { streamOllama } from "@utils/ollama";
 import { StreamingTextResponse } from "ai";
-import Product from "@type/products/Product";
+import Product from "types/products/Product";
 
 // Hobby plan doesn't allow > 10 seconds
 // export const maxDuration = 300;

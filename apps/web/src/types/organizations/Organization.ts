@@ -1,4 +1,4 @@
-import User from "@type/users/User";
+import User from "types/users/User";
 
 export default interface Organization {
   id?: string;

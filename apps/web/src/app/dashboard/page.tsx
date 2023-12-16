@@ -15,7 +15,7 @@ import { useCompletion } from 'ai/react';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
-import Product from "@type/products/Product";
+import Product from "types/products/Product";
 
 function DashboardIndex() {
   const [prompt, setPrompt] = useState<string>('');

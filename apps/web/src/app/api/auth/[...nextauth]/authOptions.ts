@@ -85,7 +85,6 @@ export const authOptions: AuthOptions = {
         const queryUserRes = await queryUserByPk({
           id: token.id,
         });
-        token.profileCompleted = queryUserRes.profile_completed;
 
         /*if (queryUserRes.organization_users) {
             token.org_ids = queryUserRes.organization_users.map((organization_user) => {
@@ -129,7 +128,6 @@ export const authOptions: AuthOptions = {
         name: token?.name,
         image: token?.image,
         organization_id: token?.organization_id,
-        profileCompleted: token?.profileCompleted,
         iat: Math.floor(Date.now() / 1000),
         exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
         'https://hasura.io/jwt/claims': {
@@ -152,7 +150,6 @@ export const authOptions: AuthOptions = {
         name: decodedToken.name,
         image: decodedToken.image,
         organization_id: decodedToken.organization_id,
-        profileCompleted: decodedToken.profileCompleted,
         iat: decodedToken.iat,
         exp: decodedToken.exp,
         'https://hasura.io/jwt/claims':

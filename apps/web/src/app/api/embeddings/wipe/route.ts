@@ -16,7 +16,7 @@ export async function POST(req: Request) {
       success: true
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return new Response(String(error), {
       status: 400,
     });

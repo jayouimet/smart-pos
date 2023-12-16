@@ -24,8 +24,6 @@ function makeClient(session: any) {
     },
   }));
 
-  console.log(session);
-
   const httpLink = new HttpLink({
     uri: process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ENDPOINT,
     fetchOptions: { cache: "no-store" },

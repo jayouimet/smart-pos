@@ -52,7 +52,6 @@ function DashboardIndex() {
         collection_name: `organization_${session.user.organization_id}`
       }
     );
-    console.log(items.data);
     
     setProducts(items.data.map(([doc,]) => doc.metadata as Product));
 

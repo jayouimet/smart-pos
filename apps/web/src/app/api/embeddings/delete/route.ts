@@ -1,4 +1,4 @@
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
+import { embedder } from "@utils/chromadb";
 import { Chroma } from "langchain/vectorstores/chroma";
 import { NextResponse } from "next/server";
 
@@ -25,10 +25,6 @@ export async function POST(req: Request) {
 
   if (!process.env.OPENAI_API_KEY)
     throw new Error("Missing env var OPENAI_API_KEY");
-
-  const embedder = new OpenAIEmbeddings({
-    openAIApiKey: process.env.OPENAI_API_KEY
-  });
 
   const vectoreStore = new Chroma(embedder, {
     url: process.env.CHROMADB_URL,

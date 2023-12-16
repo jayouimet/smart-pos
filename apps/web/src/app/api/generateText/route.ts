@@ -1,4 +1,3 @@
-import { similaritySearch } from "@utils/chromadb";
 import { streamOllama } from "@utils/ollama";
 import { StreamingTextResponse } from "ai";
 import { POSProduct } from "types/POSProducts";

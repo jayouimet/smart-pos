@@ -7,6 +7,7 @@ import { Button, Card, CardBody, CardHeader, Flex, Heading, Spacer, Stack, Text 
 import UpsertModal, { ChakraInputEnum } from "@components/modals/UpsertModal";
 import DataTable from "@components/tables/DataTable";
 import { createColumnHelper } from "@tanstack/react-table";
+import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import Category from "types/categories/Category";
@@ -145,6 +146,36 @@ const ProductsPage = () => {
     }
   });
 
+  const deleteEmbedding = async (id: string) => {
+    if (!session?.user?.organization_id) return;
+
+    await axios.post(
+      '/api/embeddings/delete',
+      {
+        ids: [id],
+        collection_name: `organization_${session.user.organization_id}`
+      }
+    );
+  }
+
+  const upsertEmbeddings = async (id: string, product: Product) => {
+    if (!session?.user?.organization_id) return;
+
+    await axios.post(
+      '/api/embeddings/upsert',
+      {
+        contents: [
+          {
+            id: id,
+            pageContent: `${product.name}: ${product.description}`,
+            metadata: product
+          }
+        ],
+        collection_name: `organization_${session.user.organization_id}`
+      }
+    );
+  }
+
   const [insertProduct] = useMutation(INSERT_PRODUCT);
   const [insertProductCategories] = useMutation(INSERT_PRODUCT_CATEGORIES);
   const [updateProduct] = useMutation(UPDATE_PRODUCT);
@@ -157,7 +188,10 @@ const ProductsPage = () => {
       variables: {
         id: product.id
       },
-      onCompleted: products_refetch
+      onCompleted: (data) => {
+        deleteEmbedding(data.delete_products_by_pk.id);
+        products_refetch();
+      }
     });
   }
 
@@ -184,7 +218,11 @@ const ProductsPage = () => {
             id: product.id,
             data: gqlProduct
           },
-          onCompleted: () => {
+          onCompleted: (productData) => {
+            upsertEmbeddings(
+              productData.update_products_by_pk.id,
+              gqlProduct
+            );
             insertProductCategories({
               variables: {
                 data: product.categories.map((cat) => {
@@ -200,7 +238,7 @@ const ProductsPage = () => {
         });
       }
     })
-    
+
     handleClose();
   }
 
@@ -224,7 +262,13 @@ const ProductsPage = () => {
       variables: {
         data: gqlProduct
       },
-      onCompleted: products_refetch
+      onCompleted: (productData) => {
+        upsertEmbeddings(
+          productData.insert_products_one.id,
+          { ...gqlProduct, product_categories: undefined}
+        );
+        products_refetch();
+      }
     });
 
     handleClose();
@@ -266,7 +310,7 @@ const ProductsPage = () => {
 
   return (
     <Flex direction={'column'} h={'100vh'} py={3}>
-      <Card 
+      <Card
         w={'100%'}
         h={'full'}
       >
@@ -284,13 +328,13 @@ const ProductsPage = () => {
             <Flex pr={5} w={'100%'} direction={'row-reverse'}>
               <Button minWidth={'90px'} onClick={handleAdd}>Add</Button>
             </Flex>
-            <DataTable 
+            <DataTable
               isDisabledEdit={() => { return session?.user.role !== 'admin' }}
               isDisabledDelete={() => { return session?.user.role !== 'admin' }}
-              handleEdit={data => handleEdit(data)} 
-              handleDelete={data => handleDelete(data)} 
-              columns={columns} 
-              data={products_loading ? [] : products_data.products} 
+              handleEdit={data => handleEdit(data)}
+              handleDelete={data => handleDelete(data)}
+              columns={columns}
+              data={products_loading ? [] : products_data.products}
             />
           </Stack>
         </CardBody>

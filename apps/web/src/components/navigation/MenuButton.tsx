@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, BoxProps, Flex, Grid, GridItem } from '@chakra-ui/react';
 import {
   LinkItemProps,
@@ -7,7 +9,7 @@ import { useSession } from 'next-auth/react';
 import { signOut } from 'next-auth/react';
 import { Fragment } from 'react';
 import { FiLogOut } from 'react-icons/fi';
-import { SystemRoles } from '@type/roles/SystemRoles';
+import { SystemRoles } from '@pos_types/roles/SystemRoles';
 
 interface MenuButtonProps extends BoxProps {
   LinkItems: Array<LinkItemProps>;

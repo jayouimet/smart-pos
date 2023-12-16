@@ -24,13 +24,14 @@
     "baseUrl": "./src/",
     "paths": {
       "@app/*": ["app/*"],
+      "@gql/*": ["gql/*"],
       "@styles/*": ["styles/*"],
       "@contexts/*": ["contexts/*"],
       "@hooks/*": ["hooks/*"],
       "@components/*": ["components/*"],
       "@assets/*": ["assets/*"],
       "@utils/*": ["utils/*"],
-      "@type/*": ["types/*"]
+      "@pos_types/*": ["types/*"]
     }
   },
   "include": [

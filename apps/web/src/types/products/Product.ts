@@ -1,4 +1,4 @@
-import Category from "@type/categories/Category";
+import Category from "@pos_types/categories/Category";
 
 export default interface Product {
   id?: string;

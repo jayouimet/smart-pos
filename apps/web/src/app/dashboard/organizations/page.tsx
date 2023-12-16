@@ -1,16 +1,15 @@
 'use client';
 
 import { useMutation, useQuery } from "@apollo/client";
-import { DELETE_CATEGORY, GET_CATEGORIES, INSERT_CATEGORY, UPDATE_CATEGORY } from "@app/gql/categories";
-import { DELETE_ORGANIZATION, GET_ORGANIZATIONS, INSERT_ORGANIZATION, UPDATE_ORGANIZATION } from "@app/gql/organizations";
+import { DELETE_ORGANIZATION, GET_ORGANIZATIONS, INSERT_ORGANIZATION, UPDATE_ORGANIZATION } from "@gql/organizations";
 import { Button, Card, CardBody, CardHeader, Flex, Heading, Stack, Text } from "@chakra-ui/react";
 import UpsertModal, { ChakraInputEnum } from "@components/modals/UpsertModal";
 import DataTable from "@components/tables/DataTable";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import Category from "@type/categories/Category";
-import Organization from "@type/organizations/Organization";
+import Category from "@pos_types/categories/Category";
+import Organization from "@pos_types/organizations/Organization";
 
 const columnHelper = createColumnHelper<Category>();
 

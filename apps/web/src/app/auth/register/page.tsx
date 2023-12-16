@@ -1,14 +1,14 @@
 'use client';
 
 import { Flex, Stack, Center } from '@chakra-ui/layout';
-import { Formik, FormikProps, useFormik } from 'formik';
+import { useFormik } from 'formik';
 import { Button, Input, Link, Select, FormControl, FormLabel } from '@chakra-ui/react';
 import { signIn } from 'next-auth/react';
 import { ChangeEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { GET_ORGANIZATIONS } from '@app/gql/organizations';
+import { GET_ORGANIZATIONS } from '@gql/organizations';
 import { useQuery } from '@apollo/client';
-import Organization from '@type/organizations/Organization';
+import Organization from '@pos_types/organizations/Organization';
 import SelectOption from '@components/base/SelectOption';
 
 type RegisterInputs = {

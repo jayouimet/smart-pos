@@ -1,6 +1,6 @@
 import { streamOllama } from "@utils/ollama";
 import { StreamingTextResponse } from "ai";
-import Product from "@type/products/Product";
+import Product from "@pos_types/products/Product";
 
 // Hobby plan doesn't allow > 10 seconds
 // export const maxDuration = 300;
@@ -16,11 +16,10 @@ export async function POST(req: Request) {
       Each additional information should be concise and should be a question to ask.
       Product description: ${prompt}
       All product descriptions: 
-        ${
-          products.map((product: Product) => {
-            return `- ${product.description}\n`;
-          })
-        }
+        ${products.map((product: Product) => {
+      return `- ${product.description}\n`;
+    })
+      }
       Additional information:
       -
     `;

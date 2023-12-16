@@ -1,11 +1,13 @@
+'use client';
+
 import { Box, Flex, Spacer, Text } from "@chakra-ui/react";
-import Product from "@type/products/Product";
+import Product from "@pos_types/products/Product";
 
 interface ProductCardProps {
   product: Product;
 }
 
-function ProductCard(props: ProductCardProps) {
+const ProductCard = (props: ProductCardProps) => {
   const { product } = props;
 
   return (

@@ -1,8 +1,8 @@
 'use client';
 
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_CATEGORIES } from "@app/gql/categories";
-import { DELETE_PRODUCT, DELETE_PRODUCT_CATEGORIES, GET_PRODUCTS, INSERT_PRODUCT, INSERT_PRODUCT_CATEGORIES, UPDATE_PRODUCT } from "@app/gql/products";
+import { GET_CATEGORIES } from "@gql/categories";
+import { DELETE_PRODUCT, DELETE_PRODUCT_CATEGORIES, GET_PRODUCTS, INSERT_PRODUCT, INSERT_PRODUCT_CATEGORIES, UPDATE_PRODUCT } from "@gql/products";
 import { Button, Card, CardBody, CardHeader, Flex, Heading, Spacer, Stack, Text } from "@chakra-ui/react";
 import UpsertModal, { ChakraInputEnum } from "@components/modals/UpsertModal";
 import DataTable from "@components/tables/DataTable";
@@ -10,8 +10,8 @@ import { createColumnHelper } from "@tanstack/react-table";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import Category from "@type/categories/Category";
-import Product from "@type/products/Product";
+import Category from "@pos_types/categories/Category";
+import Product from "@pos_types/products/Product";
 
 const columnHelper = createColumnHelper<Product>();
 

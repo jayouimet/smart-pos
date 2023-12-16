@@ -18,8 +18,8 @@ import { Card } from '@chakra-ui/react';
 import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { gql, useMutation } from '@apollo/client';
 import { useRouter } from 'next/navigation';
-import { GET_USER } from '@app/gql/users';
-import User from '@type/users/User';
+import { GET_USER } from '@gql/users';
+import User from '@pos_types/users/User';
 
 const SAVE_PROFILE = gql`
   mutation mutationUpdateProfile(

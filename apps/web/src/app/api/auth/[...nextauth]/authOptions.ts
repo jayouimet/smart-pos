@@ -351,7 +351,7 @@ async function registerUser({
     throw new Error('Member role not found');
   }
 
-  const org_role_id = result_role.data.data.organization_roles[0].id;
+  const org_role_id = result_org_role.data.data.organization_roles[0].id;
 
   const graphqlMutation = {
     operationName: 'registerMutation',

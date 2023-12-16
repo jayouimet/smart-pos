@@ -4,7 +4,7 @@ import { Flex, Stack, Center } from '@chakra-ui/layout';
 import { Formik, FormikProps, useFormik } from 'formik';
 import { Button, Input, Link, Select, FormControl, FormLabel } from '@chakra-ui/react';
 import { signIn } from 'next-auth/react';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { GET_ORGANIZATIONS } from '@app/gql/organizations';
 import { useQuery } from '@apollo/client';
@@ -12,7 +12,6 @@ import Organization from 'types/organizations/Organization';
 import SelectOption from '@components/base/SelectOption';
 
 type RegisterInputs = {
-  organization_id: undefined | string;
   email: string;
   password: string;
   first_name: string;
@@ -24,16 +23,20 @@ export default function Register() {
   const router = useRouter();
   const [error, setError] = useState<string | undefined>();
 
+  const [organizationId, setOrganizationId] = useState<string | undefined>()
+
   const { data: org_data, loading: org_loading, error: org_error, refetch: org_refetch } = useQuery(GET_ORGANIZATIONS, {
     variables: {
       where: {}
+    },
+    onCompleted: (data) => {
+      setOrganizationId(data.organizations?.[0]?.id)
     },
     fetchPolicy: 'no-cache'
   });
 
   const formik = useFormik({
     initialValues: {
-      organization_id: undefined,
       email: '',
       first_name: '',
       last_name: '',
@@ -48,7 +51,7 @@ export default function Register() {
         first_name: values.first_name,
         last_name: values.last_name,
         phone_number: values.phone_number,
-        organization_id: values.organization_id,
+        organization_id: organizationId,
         action: 'register',
         callbackUrl: `/dashboard`,
       });
@@ -79,8 +82,8 @@ export default function Register() {
                 <FormLabel>{'Organization'}</FormLabel>
                 <Select
                   name={'organization_id'}
-                  value={formik.values.organization_id || (!org_loading && org_data.organizations?.[0]?.id) || undefined}
-                  onChange={formik.handleChange}
+                  value={organizationId}
+                  onChange={(e: ChangeEvent<HTMLSelectElement>) => setOrganizationId(e.currentTarget.value)}
                 >
                   {
                     !org_loading && org_data.organizations.map((organization: Organization) => {

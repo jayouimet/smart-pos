@@ -19,7 +19,6 @@ import Product from "@pos_types/products/Product";
 
 function DashboardIndex() {
   const [prompt, setPrompt] = useState<string>('');
-  const [products, setProducts] = useState<Product[]>([]);
   const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -28,9 +27,10 @@ function DashboardIndex() {
     api: '/api/generateText',
     onError: (err: Error) => {
       console.error(err);
+      setIsLoading(false);
     },
-    body: {
-      products: products
+    onResponse: () => {
+      setIsLoading(false);
     }
   });
 
@@ -52,11 +52,10 @@ function DashboardIndex() {
         collection_name: `organization_${session.user.organization_id}`
       }
     );
-    
-    setProducts(items.data.map(([doc,]) => doc.metadata as Product));
 
     // 2. given threshold
-    const threshold = 0.7777777;
+    const threshold = 0.75;
+    // const threshold = 0.30;
     const similarItems = items.data.map(([doc, score]) => {
       if (score > threshold) return;
 
@@ -66,11 +65,15 @@ function DashboardIndex() {
     if (similarItems.length > 0) {
       // 2.1 if any product is better or equal to threshold, display them
       setDisplayedProducts(similarItems);
+      setIsLoading(false);
     } else {
       // 2.2 if all products is not similar given threshold, request details
-      complete(prompt);
+      complete(prompt, {
+        body: {
+          products: items.data.map(([doc,]) => doc.metadata as Product)
+        },
+      });
     }
-    setIsLoading(false);
   }
 
   return (

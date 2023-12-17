@@ -25,33 +25,43 @@ export const authOptions: AuthOptions = {
 
         let user: User;
 
-        if (credentials.action === 'register' && !queryUserRes) {
-          const registerRes = await registerUser({
-            email: credentials.email,
-            password_hash: password_hash,
-            first_name: credentials.first_name,
-            last_name: credentials.last_name,
-            organization_id: credentials.organization_id,
-          });
+        if (credentials.action === 'register') {
+          if (!queryUserRes) {
+            const registerRes = await registerUser({
+              email: credentials.email,
+              password_hash: password_hash,
+              first_name: credentials.first_name,
+              last_name: credentials.last_name,
+              organization_id: credentials.organization_id,
+            });
 
-          user = {
-            id: registerRes.id,
-            email: registerRes.email,
-            system_role: registerRes.system_role.name,
-            organization_role: registerRes.organization_role.name,
-            password_hash: registerRes.password_hash,
-            organization_id: registerRes.organization_id
+            user = {
+              id: registerRes.id,
+              email: registerRes.email,
+              system_role: registerRes.system_role.name,
+              organization_role: registerRes.organization_role.name,
+              password_hash: registerRes.password_hash,
+              organization_id: registerRes.organization_id
+            }
+          } else {
+            // User already exists
+            return null;
           }
           // if the user already exist, persist the id & role in the user object
         } else {
-          user = {
-            id: queryUserRes.id,
-            email: queryUserRes.email,
-            system_role: queryUserRes.system_role.name,
-            organization_role: queryUserRes.organization_role.name,
-            password_hash: queryUserRes.password_hash,
-            organization_id: queryUserRes.organization_id
-          };
+          if (queryUserRes) {
+            user = {
+              id: queryUserRes.id,
+              email: queryUserRes.email,
+              system_role: queryUserRes.system_role.name,
+              organization_role: queryUserRes.organization_role.name,
+              password_hash: queryUserRes.password_hash,
+              organization_id: queryUserRes.organization_id
+            };
+          } else {
+            // User does not already exists
+            return null;
+          }
         }
 
         const match = await bcrypt.compare(credentials.password, user.password_hash);
@@ -155,6 +165,7 @@ export const authOptions: AuthOptions = {
       return {
         id: decodedToken.id,
         role: decodedToken.role,
+        organization_role: decodedToken.organization_role,
         name: decodedToken.name,
         image: decodedToken.image,
         organization_id: decodedToken.organization_id,
@@ -210,6 +221,8 @@ async function queryUserByEmail({ email }: { email: string }) {
     ...config.gqlConfig.options,
     data: graphqlQuery,
   });
+
+  console.log(result.data)
 
   if (result.data.errors) {
     throw new Error(result.data.errors[0].message);

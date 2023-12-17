@@ -21,3 +21,87 @@ array_relationships:
         remote_table:
           name: product_categories
           schema: public
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        organization:
+          users:
+            _and:
+              - id:
+                  _eq: X-Hasura-User-Id
+              - organization_role:
+                  name:
+                    _eq: manager
+      columns:
+        - price
+        - description
+        - location
+        - name
+        - created_at
+        - updated_at
+        - id
+        - organization_id
+    comment: ""
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - price
+        - description
+        - location
+        - name
+        - created_at
+        - updated_at
+        - id
+        - organization_id
+      filter:
+        organization:
+          users:
+            id:
+              _eq: X-Hasura-User-Id
+    comment: ""
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - price
+        - description
+        - location
+        - name
+        - created_at
+        - updated_at
+        - id
+        - organization_id
+      filter:
+        organization:
+          users:
+            _and:
+              - id:
+                  _eq: X-Hasura-User-Id
+              - organization_role:
+                  name:
+                    _eq: manager
+      check:
+        organization:
+          users:
+            _and:
+              - id:
+                  _eq: X-Hasura-User-Id
+              - organization_role:
+                  name:
+                    _eq: manager
+    comment: ""
+delete_permissions:
+  - role: user
+    permission:
+      filter:
+        organization:
+          users:
+            _and:
+              - id:
+                  _eq: X-Hasura-User-Id
+              - organization_role:
+                  name:
+                    _eq: manager
+    comment: ""

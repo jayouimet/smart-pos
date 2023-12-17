@@ -27,6 +27,8 @@ import {
   Select,
   SelectProps,
   Stack,
+  Textarea,
+  TextareaProps,
 } from '@chakra-ui/react';
 import {
   useEffect,
@@ -41,6 +43,7 @@ export enum ChakraInputEnum {
   Select,
   NumberInput,
   MultiSelect,
+  Textarea,
 }
 
 interface SelectOptionProps {
@@ -49,7 +52,7 @@ interface SelectOptionProps {
   key: string;
 }
 
-interface UpsertModalField {
+export interface UpsertModalField {
   name: string;
   defaultValue?: string | number;
   defaultValues?: Array<any>;
@@ -57,6 +60,7 @@ interface UpsertModalField {
   label: string;
   formControlProps?: FormControlProps;
   inputProps?: InputProps;
+  textareaProps?: TextareaProps;
   numberInputProps?: NumberInputProps;
   selectProps?: SelectProps;
   checkboxGroupProps?: CheckboxGroupProps;
@@ -65,7 +69,7 @@ interface UpsertModalField {
   format?: (data: number) => string;
 }
 
-interface UpsertModalProps {
+export interface UpsertModalProps {
   title: string,
   isModalOpen: boolean;
   onClose: () => void;
@@ -125,6 +129,19 @@ const UpsertModal = ({
                           ></Input>
                         </FormControl>
                       );
+                    case ChakraInputEnum.Textarea: 
+                      return (
+                        <FormControl key={index} {...field.formControlProps}>
+                          <FormLabel>{field.label}</FormLabel>
+                          <Textarea
+                            {...field.textareaProps}
+                            name={field.name}
+                            placeholder={field.placeHolder}
+                            value={formik.values[field.name]}
+                            onChange={formik.handleChange}
+                          ></Textarea>
+                        </FormControl>
+                      );
                     case ChakraInputEnum.NumberInput:
                       return (
                         <FormControl key={index} {...field.formControlProps}>
@@ -169,7 +186,7 @@ const UpsertModal = ({
                             {...field.checkboxGroupProps}
                             defaultValue={formik.values?.[field.name]}
                           >
-                            <Menu isOpen={isMenuOpen[field.name]}>
+                            <Menu isLazy={true} preventOverflow={false} isOpen={isMenuOpen[field.name]}>
                               <MenuButton 
                                 onClick={() => {
                                   let op = {...isMenuOpen};

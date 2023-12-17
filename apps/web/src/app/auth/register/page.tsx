@@ -2,7 +2,7 @@
 
 import { Flex, Stack, Center } from '@chakra-ui/layout';
 import { useFormik } from 'formik';
-import { Button, Input, Link, Select, FormControl, FormLabel } from '@chakra-ui/react';
+import { Button, Input, Link, Select, FormControl, FormLabel, Spinner, useToast, Box } from '@chakra-ui/react';
 import { signIn } from 'next-auth/react';
 import { ChangeEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -10,18 +10,21 @@ import { GET_ORGANIZATIONS } from '@gql/organizations';
 import { useQuery } from '@apollo/client';
 import Organization from '@pos_types/organizations/Organization';
 import SelectOption from '@components/base/SelectOption';
+import * as Yup from 'yup';
 
 type RegisterInputs = {
   email: string;
   password: string;
+  confirm_password: string;
   first_name: string;
   last_name: string;
-  phone_number: string;
 };
 
 export default function Register() {
   const router = useRouter();
-  const [error, setError] = useState<string | undefined>();
+  const toast = useToast();
+  
+  const [isLoading, setIsLoading] = useState(false);
 
   const [organizationId, setOrganizationId] = useState<string | undefined>()
 
@@ -35,32 +38,59 @@ export default function Register() {
     fetchPolicy: 'no-cache'
   });
 
+  const RegistrationSchema = Yup.object().shape({
+    first_name: Yup.string()
+      .min(3, 'Too Short!')
+      .max(50, 'Too Long!')
+      .required('Required'),
+    last_name: Yup.string()
+      .min(3, 'Too Short!')
+      .max(50, 'Too Long!')
+      .required('Required'),
+    password: Yup.string()
+      .min(8, 'Too Short!')
+      .max(50, 'Too Long!')
+      .required('Required'),
+    confirm_password: Yup.string()
+      .oneOf([Yup.ref('password')], 'Passwords must match'),
+    email: Yup.string().email('Invalid email').required('Required'),
+  });
+
   const formik = useFormik({
     initialValues: {
       email: '',
       first_name: '',
       last_name: '',
-      phone_number: '',
-      password: ''
+      password: '',
+      confirm_password: ''
     },
+    validateOnChange: false,
+    validationSchema: RegistrationSchema,
     onSubmit: async (values: RegisterInputs, {setSubmitting}) => {
       const res = await signIn('credentials', {
-        redirect: true,
+        redirect: false,
         email: values.email,
         password: values.password,
         first_name: values.first_name,
         last_name: values.last_name,
-        phone_number: values.phone_number,
         organization_id: organizationId,
         action: 'register',
-        callbackUrl: `/dashboard`,
       });
-      if (res?.error) {
-        setError(res.error);
-      } else {
-        setError(undefined);
+      if (res) {
+        setIsLoading(false);
       }
-      if (res?.url) router.push(res.url);
+      if (res?.error) {
+        toast({
+          title: 'Email already in use',
+          description: "This email address is already in use",
+          status: 'error',
+          duration: 6000,
+          isClosable: true,
+        })
+      } 
+      if (res?.ok) {
+        router.push('/dashboard');
+      }
       setSubmitting(false);
     },
   });
@@ -103,6 +133,9 @@ export default function Register() {
                   value={formik.values.email
                 }/>
               </FormControl>
+              {formik.touched.email && formik.errors.email ? (
+                <Box color={'red'}>{formik.errors.email}</Box>
+              ) : null}
               <FormControl isRequired>
                 <Input 
                   name="first_name" 
@@ -111,6 +144,9 @@ export default function Register() {
                   value={formik.values.first_name
                 }/>
               </FormControl>
+              {formik.touched.first_name && formik.errors.first_name ? (
+                <Box color={'red'}>{formik.errors.first_name}</Box>
+              ) : null}
               <FormControl isRequired>
                 <Input 
                   name="last_name" 
@@ -119,14 +155,9 @@ export default function Register() {
                   value={formik.values.last_name
                 }/>
               </FormControl>
-              <FormControl>
-                <Input 
-                  name="phone_number" 
-                  placeholder='Phone number' 
-                  onChange={formik.handleChange}
-                  value={formik.values.phone_number
-                }/>
-              </FormControl>
+              {formik.touched.last_name && formik.errors.last_name ? (
+                <Box color={'red'}>{formik.errors.last_name}</Box>
+              ) : null}
               <FormControl isRequired>
                 <Input 
                   name="password"
@@ -136,7 +167,28 @@ export default function Register() {
                   value={formik.values.password}
                 />
               </FormControl>
-              <Button type="submit">Submit</Button>
+              {formik.touched.password && formik.errors.password ? (
+                <Box color={'red'}>{formik.errors.password}</Box>
+              ) : null}
+              <FormControl isRequired>
+                <Input 
+                  name="confirm_password"
+                  type="password"
+                  placeholder='Confirm password'
+                  onChange={formik.handleChange}
+                  value={formik.values.confirm_password}
+                />
+              </FormControl>
+              {formik.touched.confirm_password && formik.errors.confirm_password ? (
+                <Box color={'red'}>{formik.errors.confirm_password}</Box>
+              ) : null}
+              <Button 
+                type={"submit"}
+                isLoading={isLoading}
+                loadingText={'Sign up'}
+              >
+                  {isLoading ? <Spinner size="sm" /> : 'Sign up'}
+              </Button>
             </Stack>
           </form>
           <Center>

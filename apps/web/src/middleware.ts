@@ -16,16 +16,33 @@ export async function middleware(req: NextRequest) {
     raw: true,
   });
 
+  const anonymousRoutes = [
+    '/',
+    '/auth/signin',
+    '/auth/register',
+  ]
+
   const adminRoutes = [
     '/dashboard',
+    '/dashboard/organizations',
     '/dashboard/categories',
     '/dashboard/products',
     '/profile',
   ]
 
-  const userRoutes = [
+  const managerRoutes = [
     '/dashboard',
+    '/profile',
+    '/dashboard/categories',
+    '/dashboard/products',
   ];
+
+  const memberRoutes = [
+    '/dashboard',
+    '/profile',
+  ];
+
+  let allowedRoutes: Array<string> = anonymousRoutes;
 
   if (token) {
     // if we have a token here, it is verified, we can now decode it using edge runtime compatible jwt-decode module.
@@ -35,17 +52,22 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL('/', req.url));
     }
 
-    let allowedRoutes: Array<string> = [];
     if (decodedJwt.role === 'admin') {
       allowedRoutes = adminRoutes;
     } else if (decodedJwt.role === 'user') {
-      allowedRoutes = userRoutes;
+      if (decodedJwt.organization_role === 'manager') {
+        allowedRoutes = managerRoutes;
+      } else if (decodedJwt.organization_role === 'member') {
+        allowedRoutes = memberRoutes;
+      }
     }
 
-    if (!allowedRoutes.some((route) => req.nextUrl.pathname.startsWith(route))) {
+    if (!allowedRoutes.some((route) => route === req.nextUrl.pathname)) {
       return NextResponse.redirect(new URL('/dashboard', req.url));
     }
-  } else {
+  }
+
+  if (!allowedRoutes.some((route) => route === req.nextUrl.pathname)) {
     return NextResponse.redirect(new URL('/', req.url));
   }
 }
@@ -53,7 +75,9 @@ export async function middleware(req: NextRequest) {
 // See "Matching Paths" below to learn more
 export const config = {
   matcher: [
+    '/',
     '/dashboard/:path*',
     '/profile/:path*',
+    '/auth/:path*',
   ],
 };

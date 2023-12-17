@@ -1,31 +1,3 @@
 table:
   name: role_permissions
   schema: public
-object_relationships:
-  - name: organization_role
-    using:
-      manual_configuration:
-        column_mapping:
-          role_id: id
-        insertion_order: null
-        remote_table:
-          name: organization_roles
-          schema: public
-  - name: permission
-    using:
-      manual_configuration:
-        column_mapping:
-          permission_id: id
-        insertion_order: null
-        remote_table:
-          name: permissions
-          schema: public
-  - name: system_role
-    using:
-      manual_configuration:
-        column_mapping:
-          role_id: id
-        insertion_order: null
-        remote_table:
-          name: system_roles
-          schema: public

@@ -20,12 +20,15 @@ import { CloseIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/navigation';
 import MenuButton from '@components/navigation/MenuButton';
 import { SystemRoles } from '@pos_types/roles/SystemRoles';
+import { OrganizationRoles } from '@pos_types/roles/OrganizationRoles';
+import { Session } from 'inspector';
 
 export interface LinkItemProps {
   name: string;
   icon: IconType;
   href: string;
-  minRole: SystemRoles;
+  minSysRole: SystemRoles;
+  minOrgRole: OrganizationRoles;
 }
 
 interface NavItemProps extends FlexProps {
@@ -58,25 +61,29 @@ const LinkItems: Array<LinkItemProps> = [
     name: 'Home', 
     icon: FiHome, 
     href: '/dashboard', 
-    minRole: SystemRoles.USER 
+    minSysRole: SystemRoles.USER,
+    minOrgRole: OrganizationRoles.MEMBER,
   },
   {
     name: 'Organizations',
     icon: FiUsers,
     href: '/dashboard/organizations',
-    minRole: SystemRoles.ADMIN,
+    minSysRole: SystemRoles.ADMIN,
+    minOrgRole: OrganizationRoles.MANAGER,
   },
   {
     name: 'Products',
     icon: FiBox,
     href: '/dashboard/products',
-    minRole: SystemRoles.ADMIN,
+    minSysRole: SystemRoles.USER,
+    minOrgRole: OrganizationRoles.MANAGER,
   },
   {
     name: 'Categories',
     icon: FiLayers,
     href: '/dashboard/categories',
-    minRole: SystemRoles.ADMIN,
+    minSysRole: SystemRoles.USER,
+    minOrgRole: OrganizationRoles.MANAGER,
   },
 ];
 
@@ -127,10 +134,19 @@ const SidebarContent = ({
 
           {LinkItems.map((link) => {
             if (
-              (link.minRole === SystemRoles.ADMIN &&
-                session?.user.role === SystemRoles.ADMIN) ||
-              link.minRole === SystemRoles.USER
-            )
+              session?.user.role === SystemRoles.ADMIN ||
+              link.minSysRole === SystemRoles.USER &&
+              session?.user.role === SystemRoles.USER &&
+              ((
+                (link.minOrgRole === OrganizationRoles.MANAGER ||
+                link.minOrgRole === OrganizationRoles.MEMBER) &&
+                session?.user.organization_role === OrganizationRoles.MANAGER
+              ) || 
+              (
+                link.minOrgRole === OrganizationRoles.MEMBER &&
+                session?.user.organization_role === OrganizationRoles.MEMBER
+              ))
+            ) {
               return (
                 <Box
                   key={link.name}
@@ -141,6 +157,7 @@ const SidebarContent = ({
                   <NavItem key={link.name} icon={link.icon} />
                 </Box>
               );
+            }
           })}
 
           {/* CATEGORIES ACCORDION */}

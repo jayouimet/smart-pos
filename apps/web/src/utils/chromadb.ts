@@ -46,14 +46,22 @@ export async function embedDocuments(
   // Preprocessing the data (spliting)
   await Promise.all(
     contents.map(async (page: Page) => {
+      let repeatedContent = page.pageContent;
+
+      while (repeatedContent.length < 900 && page.pageContent.length > 0) {
+        repeatedContent += page.pageContent;
+      }
+
+      repeatedContent = repeatedContent.slice(0, 900);
+
       if (page.pageContent.length <= MAX_CHUNK_SIZE && page.pageContent.length > 0) {
         ids.push(page.id);
         documents.push({
-          pageContent: page.pageContent,
+          pageContent: repeatedContent,
           metadata: page.metadata,
         });
       } else {
-        const splittedDoc = await splitter.splitText(page.pageContent);
+        const splittedDoc = await splitter.splitText(repeatedContent);
         splittedDoc.forEach((doc, index) => {
           if (doc === "") return;
 

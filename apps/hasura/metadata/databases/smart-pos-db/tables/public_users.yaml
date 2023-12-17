@@ -29,3 +29,34 @@ object_relationships:
         remote_table:
           name: system_roles
           schema: public
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - email
+        - first_name
+        - last_name
+        - password_hash
+        - created_at
+        - updated_at
+        - id
+        - organization_id
+        - organization_role_id
+        - system_role_id
+      filter:
+        organization:
+          users:
+            id:
+              _eq: X-Hasura-User-Id
+    comment: ""
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - first_name
+        - last_name
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      check: null
+    comment: ""

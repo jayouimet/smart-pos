@@ -4,7 +4,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { GET_CATEGORIES } from "@gql/categories";
 import { DELETE_PRODUCT, DELETE_PRODUCT_CATEGORIES, GET_PRODUCTS, INSERT_PRODUCT, INSERT_PRODUCT_CATEGORIES, UPDATE_PRODUCT } from "@gql/products";
 import { Button, Card, CardBody, CardHeader, Flex, Heading, Spacer, Stack, Text } from "@chakra-ui/react";
-import UpsertModal, { ChakraInputEnum } from "@components/modals/UpsertModal";
+import UpsertModal, { ChakraInputEnum, UpsertModalField } from "@components/modals/UpsertModal";
 import DataTable from "@components/tables/DataTable";
 import { createColumnHelper } from "@tanstack/react-table";
 import axios from "axios";
@@ -40,7 +40,7 @@ const columns = [
 const ProductsPage = () => {
   const { data: session } = useSession();
 
-  const [fields, setFields] = useState([
+  const [fields, setFields] = useState<Array<UpsertModalField>>([
     {
       name: 'name',
       defaultValue: '',
@@ -49,16 +49,23 @@ const ProductsPage = () => {
       placeHolder: 'Name',
       formControlProps: {
         isRequired: true
+      },
+      inputProps: {
+        maxLength: 250,
       }
     },
     {
       name: 'description',
       defaultValue: '',
       label: 'Description',
-      type: ChakraInputEnum.Input,
+      type: ChakraInputEnum.Textarea,
       placeHolder: 'Description',
       formControlProps: {
-        isRequired: true
+        isRequired: true,
+      },
+      textareaProps: {
+        maxLength: 650,
+        resize: 'vertical',
       }
     },
     {
@@ -329,8 +336,18 @@ const ProductsPage = () => {
               <Button minWidth={'90px'} onClick={handleAdd}>Add</Button>
             </Flex>
             <DataTable
-              isDisabledEdit={() => { return session?.user.role !== 'admin' }}
-              isDisabledDelete={() => { return session?.user.role !== 'admin' }}
+              isDisabledEdit={() => { 
+                return (
+                  session?.user.role !== 'admin' && 
+                  session?.user.organization_role !== 'manager'
+                )
+              }}
+              isDisabledDelete={() => { 
+                return (
+                  session?.user.role !== 'admin' && 
+                  session?.user.organization_role !== 'manager'
+                )
+              }}
               handleEdit={data => handleEdit(data)}
               handleDelete={data => handleDelete(data)}
               columns={columns}

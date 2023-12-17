@@ -1,13 +1,3 @@
 table:
   name: permissions
   schema: public
-array_relationships:
-  - name: role_permissions
-    using:
-      manual_configuration:
-        column_mapping:
-          id: permission_id
-        insertion_order: null
-        remote_table:
-          name: role_permissions
-          schema: public

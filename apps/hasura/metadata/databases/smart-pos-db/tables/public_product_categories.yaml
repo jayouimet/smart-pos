@@ -20,3 +20,129 @@ object_relationships:
         remote_table:
           name: products
           schema: public
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        _and:
+          - category:
+              organization:
+                users:
+                  _and:
+                    - id:
+                        _eq: X-Hasura-User-Id
+                    - organization_role:
+                        name:
+                          _eq: manager
+          - product:
+              organization:
+                users:
+                  _and:
+                    - id:
+                        _eq: X-Hasura-User-Id
+                    - organization_role:
+                        name:
+                          _eq: manager
+      columns:
+        - created_at
+        - updated_at
+        - category_id
+        - id
+        - product_id
+    comment: ""
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - created_at
+        - updated_at
+        - category_id
+        - id
+        - product_id
+      filter:
+        _and:
+          - category:
+              organization:
+                users:
+                  id:
+                    _eq: X-Hasura-User-Id
+          - product:
+              organization:
+                users:
+                  id:
+                    _eq: X-Hasura-User-Id
+    comment: ""
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - created_at
+        - updated_at
+        - category_id
+        - id
+        - product_id
+      filter:
+        _and:
+          - category:
+              organization:
+                users:
+                  _and:
+                    - id:
+                        _eq: X-Hasura-User-Id
+                    - organization_role:
+                        name:
+                          _eq: manager
+          - product:
+              organization:
+                users:
+                  _and:
+                    - id:
+                        _eq: X-Hasura-User-Id
+                    - organization_role:
+                        name:
+                          _eq: manager
+      check:
+        _and:
+          - category:
+              organization:
+                users:
+                  _and:
+                    - id:
+                        _eq: X-Hasura-User-Id
+                    - organization_role:
+                        name:
+                          _eq: manager
+          - product:
+              organization:
+                users:
+                  _and:
+                    - id:
+                        _eq: X-Hasura-User-Id
+                    - organization_role:
+                        name:
+                          _eq: manager
+    comment: ""
+delete_permissions:
+  - role: user
+    permission:
+      filter:
+        _and:
+          - category:
+              organization:
+                users:
+                  _and:
+                    - id:
+                        _eq: X-Hasura-User-Id
+                    - organization_role:
+                        name:
+                          _eq: manager
+          - product:
+              organization:
+                users:
+                  _and:
+                    - id:
+                        _eq: X-Hasura-User-Id
+                    - organization_role:
+                        name:
+                          _eq: manager
+    comment: ""

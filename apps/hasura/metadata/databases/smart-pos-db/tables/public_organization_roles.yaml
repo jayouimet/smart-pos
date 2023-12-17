@@ -2,15 +2,6 @@ table:
   name: organization_roles
   schema: public
 array_relationships:
-  - name: role_permissions
-    using:
-      manual_configuration:
-        column_mapping:
-          id: role_id
-        insertion_order: null
-        remote_table:
-          name: role_permissions
-          schema: public
   - name: users
     using:
       manual_configuration:

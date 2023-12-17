@@ -56,7 +56,7 @@ function DashboardIndex() {
     setProducts(items.data.map(([doc,]) => doc.metadata as Product));
 
     // 2. given threshold
-    const threshold = 0.420;
+    const threshold = 0.7777777;
     const similarItems = items.data.map(([doc, score]) => {
       if (score > threshold) return;
 

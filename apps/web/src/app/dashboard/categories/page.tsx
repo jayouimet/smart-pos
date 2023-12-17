@@ -67,12 +67,13 @@ const CategoriesPage = () => {
   const onUpdateSubmitCallback = (category: any) => {
     let gqlCategory = {
       name: category?.name,
+      organization_id: session?.user.organization_id
     }
 
     updateCategory({
       variables: {
         id: category.id,
-        data: gqlCategory
+        data: gqlCategory,
       },
       onCompleted: refetch
     });
@@ -83,6 +84,7 @@ const CategoriesPage = () => {
   const onInsertSubmitCallback = (category: any) => {
     let gqlCategory = {
       name: category?.name,
+      organization_id: session?.user.organization_id
     }
 
     insertCategory({
@@ -140,8 +142,18 @@ const CategoriesPage = () => {
               <Button minWidth={'90px'} onClick={handleAdd}>Add</Button>
             </Flex>
             <DataTable 
-              isDisabledEdit={() => { return session?.user.role !== 'admin' }}
-              isDisabledDelete={() => { return session?.user.role !== 'admin' }}
+              isDisabledEdit={() => { 
+                return (
+                  session?.user.role !== 'admin' && 
+                  session?.user.organization_role !== 'manager'
+                )
+              }}
+              isDisabledDelete={() => { 
+                return (
+                  session?.user.role !== 'admin' && 
+                  session?.user.organization_role !== 'manager'
+                )
+              }}
               handleEdit={data => handleEdit(data)} 
               handleDelete={data => handleDelete(data)} 
               columns={columns} 

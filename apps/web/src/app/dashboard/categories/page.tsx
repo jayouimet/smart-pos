@@ -1,14 +1,15 @@
 'use client';
 
 import { useMutation, useQuery } from "@apollo/client";
-import { DELETE_CATEGORY, GET_CATEGORIES, INSERT_CATEGORY, UPDATE_CATEGORY } from "@gql/categories";
-import { Button, Card, CardBody, CardHeader, Flex, Heading, Stack, Text } from "@chakra-ui/react";
+import { DELETE_CATEGORY, GET_CATEGORIES_PAGE, INSERT_CATEGORY, UPDATE_CATEGORY } from "@gql/categories";
+import { Button, Card, CardBody, CardHeader, Center, Flex, Heading, Stack, Text } from "@chakra-ui/react";
 import UpsertModal, { ChakraInputEnum } from "@components/modals/UpsertModal";
 import DataTable from "@components/tables/DataTable";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import Category from "@pos_types/categories/Category";
+import PaginationComponent from "@components/tables/PaginationComponent";
 
 const columnHelper = createColumnHelper<Category>();
 
@@ -36,6 +37,8 @@ const CategoriesPage = () => {
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [pageIndex, setPageIndex] = useState<number>(1);
+  const [numberOfPages, setNumberOfPages] = useState<number>(1);
   const [initialValues, setInitialValues] = useState<{
     id?: string;
     name: string;
@@ -44,9 +47,14 @@ const CategoriesPage = () => {
     name: '',
   })
 
-  const { data, loading, error, refetch } = useQuery(GET_CATEGORIES, {
+  const { data, loading, error, refetch } = useQuery(GET_CATEGORIES_PAGE, {
     variables: {
-      where: {}
+      where: {},
+      limit: 7,
+      offset: (pageIndex - 1) * 7,
+    },
+    onCompleted: (data) => {
+      setNumberOfPages(data.categories_aggregate.aggregate.totalCount > 0 ? Math.ceil(data.categories_aggregate.aggregate.totalCount / 7) : 0);
     },
     fetchPolicy: 'no-cache',
   });
@@ -119,6 +127,11 @@ const CategoriesPage = () => {
     setIsModalOpen(false);
   }
 
+  const handlePageChange = (page: number) => {
+    console.log(page);
+    setPageIndex(page);
+  };
+
   const [onSubmitCallback, setOnSubmitCallback] = useState<(category: any) => void>(() => onInsertSubmitCallback);
 
   return (
@@ -159,6 +172,9 @@ const CategoriesPage = () => {
               columns={columns} 
               data={loading ? [] : data.categories} 
             />
+            <Center>
+              <PaginationComponent handlePageChange={handlePageChange} pageIndex={pageIndex} numberOfPages={numberOfPages}/>
+            </Center>
           </Stack>
         </CardBody>
         {isModalOpen && (

@@ -79,6 +79,7 @@ const theme = extendTheme({
         },
       },
       secondary: {
+        white: 'white',
         tangerine: '#F78D57',
         pineGreen: '#1C7663',
         robinEggBlue: '#0ACECB',

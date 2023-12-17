@@ -21,6 +21,34 @@ export const GET_CATEGORIES = gql`
   }
 `
 
+export const GET_CATEGORIES_PAGE = gql`
+  query getCategories (
+    $limit: Int!
+    $offset: Int!
+    $where: categories_bool_exp!
+  ) {
+    categories_aggregate(where: $where) {
+      aggregate {
+        totalCount: count
+      }
+    }
+    categories (
+      where: $where,
+      limit: $limit,
+      offset: $offset,
+      order_by: {
+        name: asc
+      }
+    ) {
+      id
+      name
+      organization_id
+      created_at
+      updated_at
+    }
+  }
+`
+
 ////////////////////////////////////////////////////////////////////////////////
 /*--------------------------     INSERTIONS    -------------------------------*/
 ////////////////////////////////////////////////////////////////////////////////

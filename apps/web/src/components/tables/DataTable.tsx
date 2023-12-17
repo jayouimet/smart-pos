@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from "react";
-import { Table, Box, Text, Flex, Thead, Tbody, Tr, Th, Td, chakra, Button, Stack } from "@chakra-ui/react";
+import { Table, Box, Text, Flex, Thead, Tbody, Tr, Th, Td, chakra, Button, Stack, position } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import {
   useReactTable,
@@ -93,14 +93,25 @@ function DataTable<Data extends object>({
               // see https://tanstack.com/table/v8/docs/api/core/column-def#meta to type this correctly
               const meta: any = cell.column.columnDef.meta;
               return (
-                <Td key={cell.id} isNumeric={meta?.isNumeric}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                <Td verticalAlign={'top'} key={cell.id} isNumeric={meta?.isNumeric}>
+                  <Box 
+                    maxH={'16vh'} 
+                    textOverflow={'ellipsis'}
+                    overflow={'hidden'}
+                    display={'-webkit-box'}
+                    style={{
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: 'vertical'
+                    }}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </Box>
                 </Td>
               );
             })}
             {
               (handleEdit || handleDelete || handleDisplay) &&
-              <Td>
+              <Td verticalAlign={'top'}>
                 <Stack direction={"row"} ml={'auto'} minWidth={'fit-content'} w={'100%'}>
                   <Stack direction={"row"} ml={'auto'}>
                     {

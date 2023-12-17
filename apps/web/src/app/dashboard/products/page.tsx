@@ -2,8 +2,8 @@
 
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_CATEGORIES } from "@gql/categories";
-import { DELETE_PRODUCT, DELETE_PRODUCT_CATEGORIES, GET_PRODUCTS, INSERT_PRODUCT, INSERT_PRODUCT_CATEGORIES, UPDATE_PRODUCT } from "@gql/products";
-import { Button, Card, CardBody, CardHeader, Flex, Heading, Spacer, Stack, Text } from "@chakra-ui/react";
+import { DELETE_PRODUCT, DELETE_PRODUCT_CATEGORIES, GET_PRODUCTS_PAGE, INSERT_PRODUCT, INSERT_PRODUCT_CATEGORIES, UPDATE_PRODUCT } from "@gql/products";
+import { Button, Card, CardBody, CardHeader, Center, Flex, Heading, Spacer, Stack, Text } from "@chakra-ui/react";
 import UpsertModal, { ChakraInputEnum, UpsertModalField } from "@components/modals/UpsertModal";
 import DataTable from "@components/tables/DataTable";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -12,6 +12,7 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import Category from "@pos_types/categories/Category";
 import Product from "@pos_types/products/Product";
+import PaginationComponent from "@components/tables/PaginationComponent";
 
 const columnHelper = createColumnHelper<Product>();
 
@@ -107,6 +108,8 @@ const ProductsPage = () => {
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [pageIndex, setPageIndex] = useState<number>(1);
+  const [numberOfPages, setNumberOfPages] = useState<number>(1);
   const [initialValues, setInitialValues] = useState<{
     id?: string;
     name: string;
@@ -123,9 +126,14 @@ const ProductsPage = () => {
     categories: []
   })
 
-  const { data: products_data, loading: products_loading, error: products_error, refetch: products_refetch } = useQuery(GET_PRODUCTS, {
+  const { data: products_data, loading: products_loading, error: products_error, refetch: products_refetch } = useQuery(GET_PRODUCTS_PAGE, {
     variables: {
-      where: {}
+      where: {},
+      limit: 5,
+      offset: (pageIndex - 1) * 5,
+    },
+    onCompleted: (data) => {
+      setNumberOfPages(data.products_aggregate.aggregate.totalCount > 0 ? Math.ceil(data.products_aggregate.aggregate.totalCount / 5) : 0);
     },
     fetchPolicy: 'no-cache',
   });
@@ -313,6 +321,11 @@ const ProductsPage = () => {
     setIsModalOpen(false);
   }
 
+  const handlePageChange = (page: number) => {
+    console.log(page);
+    setPageIndex(page);
+  };
+
   const [onSubmitCallback, setOnSubmitCallback] = useState<(product: any) => void>(() => onInsertSubmitCallback);
 
   return (
@@ -353,6 +366,9 @@ const ProductsPage = () => {
               columns={columns}
               data={products_loading ? [] : products_data.products}
             />
+          <Center>
+            <PaginationComponent handlePageChange={handlePageChange} pageIndex={pageIndex} numberOfPages={numberOfPages}/>
+          </Center>
           </Stack>
         </CardBody>
         {isModalOpen && (

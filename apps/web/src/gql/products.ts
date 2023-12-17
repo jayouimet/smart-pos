@@ -4,10 +4,21 @@ import { gql } from "@apollo/client";
 /*----------------------------     QUERIES    --------------------------------*/
 ////////////////////////////////////////////////////////////////////////////////
 
-export const GET_PRODUCTS = gql`
-  query getProducts ($where: products_bool_exp!) {
+export const GET_PRODUCTS_PAGE = gql`
+  query getProducts (
+      $limit: Int!
+      $offset: Int!
+      $where: products_bool_exp!
+    ) {
+    products_aggregate(where: $where) {
+      aggregate {
+        totalCount: count
+      }
+    }
     products (
       where: $where,
+      limit: $limit,
+      offset: $offset,
       order_by: {
         name: asc
       }

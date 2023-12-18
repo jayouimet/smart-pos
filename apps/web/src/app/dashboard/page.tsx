@@ -91,7 +91,7 @@ function DashboardIndex() {
       </Flex>
       <Stack flex={1} height={'100%'}>
         <Flex width={'100%'} direction={'row'}>
-          <Textarea width={'92%'} height={"8vh"} value={prompt} resize={"none"} onChange={handleChangePrompt} />
+          <Textarea fontSize={'1.5em'} width={'92%'} height={"8vh"} value={prompt} resize={"none"} onChange={handleChangePrompt} />
           <Box width={'8%'} minWidth={'80px'}>
             <Box m={'auto'} mt={6} width={'40px'}>
               <Vocal className={'Vocal'} onResult={(text) => setPrompt(text)} />

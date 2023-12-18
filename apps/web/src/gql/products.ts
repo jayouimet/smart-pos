@@ -4,6 +4,33 @@ import { gql } from "@apollo/client";
 /*----------------------------     QUERIES    --------------------------------*/
 ////////////////////////////////////////////////////////////////////////////////
 
+export const GET_PRODUCTS = gql`
+  query getProducts ($where: products_bool_exp!) {
+    products (where: $where) {
+      id
+      name
+      description
+      location
+      price
+      organization_id
+      organization {
+        id
+        name
+      }
+      product_categories {
+        id
+        category_id
+        category {
+          id
+          name
+        }
+      }
+      created_at
+      updated_at
+    }
+  }
+`
+
 export const GET_PRODUCTS_PAGE = gql`
   query getProducts (
       $limit: Int!

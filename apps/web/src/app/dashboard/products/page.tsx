@@ -173,6 +173,12 @@ const ProductsPage = () => {
     );
   }
 
+  const resetEmbeddings = async () => {
+    if (!session?.user?.organization_id) return;
+
+    await axios.post('/api/embeddings/reset');
+  }
+
   const upsertEmbeddings = async (id: string, product: Product) => {
     if (!session?.user?.organization_id) return;
 
@@ -346,6 +352,7 @@ const ProductsPage = () => {
         <CardBody>
           <Stack>
             <Flex pr={5} w={'100%'} direction={'row-reverse'}>
+              <Button minWidth={'90px'} onClick={resetEmbeddings}>Reset</Button>
               <Button minWidth={'90px'} onClick={handleAdd}>Add</Button>
             </Flex>
             <DataTable
@@ -364,7 +371,7 @@ const ProductsPage = () => {
               handleEdit={data => handleEdit(data)}
               handleDelete={data => handleDelete(data)}
               columns={columns}
-              data={products_loading ? [] : products_data.products}
+              data={products_loading || !products_data ? [] : products_data.products}
             />
           <Center>
             <PaginationComponent handlePageChange={handlePageChange} pageIndex={pageIndex} numberOfPages={numberOfPages}/>

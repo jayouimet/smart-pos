@@ -24,10 +24,9 @@ export async function POST(req: Request) {
       You are an employee in a store and you help customers find items. 
       You received the following description : ${prompt}
       Given the description, you were not able to find a matching item. 
-      However, the closest matches were : ${products.map((product: Product) => { return `- ${product.name}\n`; })}. 
-      Which are tools matching the categories described by these keywords : ${productDescription}
-      Firstly, appologize for not finding the item and tell the user what kind of products you found using the closest matches above.
-      Ask the customer for more relevant information about the item he is looking for to help you choose using the previous closest matches while keeping in mind their use with the help of the provided keywords.
+      However, the closest keyword matches are : ${productDescription}
+      Firstly, appologize for not finding the item.
+      Secondly, ask the customer for more relevant information about the item he is looking for to help you choose using the previous closest matches while keeping in mind their use with the help of the provided keywords.
       Make sure your question stays short, we wouldn't want to take too much time off of the customer's day.
     `;
 

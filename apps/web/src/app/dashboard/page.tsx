@@ -77,7 +77,7 @@ function DashboardIndex() {
   }
 
   return (
-    <>
+    <Flex direction={'column'} height="100vh">
       <Flex
         justify={'space-between'}
         align={{ base: 'flex-start', md: 'center' }}
@@ -89,32 +89,32 @@ function DashboardIndex() {
           {'Dashboard'}
         </Text>
       </Flex>
-      <Stack>
+      <Stack flex={1} height={'100%'}>
         <Flex width={'100%'} direction={'row'}>
-          <Textarea mr={3} width={'60%'} height={"63vh"} value={prompt} resize={"none"} onChange={handleChangePrompt} />
-          {
+          <Textarea width={'92%'} height={"8vh"} value={prompt} resize={"none"} onChange={handleChangePrompt} />
+          <Box width={'8%'} minWidth={'80px'}>
+            <Box m={'auto'} mt={6} width={'40px'}>
+              <Vocal className={'Vocal'} onResult={(text) => setPrompt(text)} />
+            </Box>
+          </Box>
+        </Flex>
+        {
             displayedProducts.length === 0 ?
-              <Textarea ml={3} width={'40%'} fontSize={'sm'} value={completion} resize={"none"} height={"63vh"} readOnly={true} />
+              <Textarea width={'100%'} fontSize={'sm'} value={completion} resize={"none"} height={'55vh'} readOnly={true} />
               :
-              <Flex ml={3} width={'40%'} flexDirection={'column'} align={'center'} gap={3} height={"63vh"}>
+              <Flex width={'100%'} flexDirection={'row'} alignContent={'stretch'} flexWrap={'wrap'} gap={'0.5%'} height={'55vh'} >
                 {
                   displayedProducts.map(product => {
-                    return <ProductCard product={product} />
+                    return <ProductCard flexBasis={'33%'} height={'50%'} product={product} />
                   })
                 }
               </Flex>
           }
-        </Flex>
-        <Flex width={'100%'} direction={'row'}>
-          <Box mr={3} width={'60%'} maxWidth={'60%'}>
-            <Box m={'auto'} mt={6} width={'100px'}>
-              <Vocal className={'Vocal'} onResult={(text) => setPrompt(text)} />
-            </Box>
-          </Box>
-          <Button isLoading={isLoading} ml={3} width={'40%'} maxWidth={'40%'} mt={5} height={'15vh'} onClick={() => generateOutput()}>Find it</Button>
-        </Flex>
+          <Flex width={'100%'} direction={'row'}>
+            <Button isLoading={isLoading} width={'100%'} maxWidth={'100%'} mt={5} height={'15vh'} onClick={() => generateOutput()}>Find it</Button>
+          </Flex>
       </Stack>
-    </>
+    </Flex>
   );
 }
 

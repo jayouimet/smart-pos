@@ -1,24 +1,23 @@
 'use client';
 
-import { Box, Flex, Spacer, Text } from "@chakra-ui/react";
+import { Box, BoxProps, Flex, Spacer, Text } from "@chakra-ui/react";
 import Product from "@pos_types/products/Product";
 
-interface ProductCardProps {
+interface ProductCardProps extends BoxProps {
   product: Product;
 }
 
 const ProductCard = (props: ProductCardProps) => {
-  const { product } = props;
+  const { product, ...rest } = props;
 
   return (
     <Box
-      maxW="md"
       borderWidth="1px"
       borderRadius="lg"
       overflow="hidden"
       p={2}
       key={product.id}
-      maxHeight={'25%'}
+      {...rest}
     >
       <Text fontSize="25" fontWeight="semibold" align={'center'} color={'red.500'}>
         {product.name.toUpperCase()}

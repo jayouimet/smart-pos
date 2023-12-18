@@ -19,33 +19,42 @@ const ProductCard = (props: ProductCardProps) => {
       key={product.id}
       {...rest}
     >
-      <Text fontSize="25" fontWeight="semibold" align={'center'} color={'red.500'}>
-        {product.name.toUpperCase()}
-      </Text>
-      <Flex align="center" mt={1}>
-        <Box width={'50%'}>
-          {
-            product.description && (
-              <>
-                <Text fontSize="15" fontWeight={'normal'} align={'center'}>
-                  DESCRIPTION
-                </Text>
-                <Text color="gray.400" align={'center'} fontStyle={'italic'}>
-                  {product.description}
-                </Text>
-              </>
-            )}
-        </Box>
-        <Spacer />
-        <Box flex="1">
-          <Text fontSize="15" fontWeight={'normal'} align={'center'}>
-            LOCATION
-          </Text>
-          <Text fontSize="35" fontWeight={'bold'} align={'center'} color={'green'} fontStyle={'italic'}>
-            {product.location || 'AAFF'}
-          </Text>
-        </Box>
-        <Spacer />
+      <Flex height={'100%'} p={4} direction={'column'} width={'100%'} mt={1}>
+        <Text 
+          flex={1} 
+          fontSize="1.5em"
+          fontWeight="semibold"
+          height={'50%'}
+          maxHeight={'3.1em'}
+          textOverflow={'ellipsis'}
+          overflow={'hidden'}
+          display={'-webkit-box'}
+          style={{
+            WebkitLineClamp: 2,
+            lineClamp: 2,
+            WebkitBoxOrient: 'vertical'
+          }} 
+          color={'red.500'}>
+          {product.name.toUpperCase()}
+        </Text>
+        <Flex>
+          <Box flex="1">
+            <Text fontSize="15" fontWeight={'normal'}>
+              LOCATION
+            </Text>
+            <Text fontSize="35" fontWeight={'bold'} color={'green'} fontStyle={'italic'}>
+              {product.location || 'AAFF'}
+            </Text>
+          </Box>
+          <Box flex="1">
+            <Text fontSize="15" fontWeight={'normal'}>
+              Price
+            </Text>
+            <Text fontSize="35" fontWeight={'bold'} color={'green'} fontStyle={'italic'}>
+              {`${parseFloat((product.price / 100).toString()).toFixed(2)} $` || 'NAN'}
+            </Text>
+          </Box>
+        </Flex>
       </Flex>
     </Box>
   )

@@ -32,7 +32,7 @@ export async function similaritySearch(
       'hnsw:space': 'cosine'
     }
   });
-  const response = await vectorStore.similaritySearchWithScore(prompt, 4);
+  const response = await vectorStore.similaritySearchWithScore(prompt, 6);
   return response;
 }
 

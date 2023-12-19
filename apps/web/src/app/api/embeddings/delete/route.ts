@@ -23,9 +23,6 @@ export async function POST(req: Request) {
 
   const { collection_name, ids } = body;
 
-  if (!process.env.OPENAI_API_KEY)
-    throw new Error("Missing env var OPENAI_API_KEY");
-
   const vectoreStore = new Chroma(embedder, {
     url: process.env.CHROMADB_URL,
     collectionName: collection_name

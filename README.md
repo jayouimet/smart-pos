@@ -1,59 +1,31 @@
-# Turborepo starter
+# projet-dev-sys-info
+ 
+## Prerequesites
+Docker
+Yarn
+Hasura CLI
+Node.JS
 
-This is an official starter Turborepo.
+## Setup
 
-## What's inside?
+Create a file named `.env.dev` at the root of the folder and copy and paste the content of `.env.exemple` in the same folder into it.
+Replace `YOUR_NEXT_AUTH_SECRET` with a chain of characters that will be used for encoding your JWT.
 
-This Turborepo includes the following packages/apps:
+Create a file named `.env.local` at the root of the folder and copy and paste the content of `.env.exemple` in the same folder into it.
+Replace `YOUR_NEXT_AUTH_SECRET` with a chain of characters that will be used for encoding your JWT. 
+This must be the same chain of characters as the one in the last file.
 
-### Apps and Packages
+Run `yarn` in the `web` folder to install dependencies.
 
-- `web`: a [Next.js](https://nextjs.org/) app
-- `chroma-middleware`: a middleware to allow the use of chroma while still exposing edge functions
-- `tsconfig`: `tsconfig.json`s used throughout the monorepo
+Run `docker-compose up --build` at the root of the repository to start the docker container.
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+Run the following commands in the hasura folder to initialize the db: 
+`hasura metadata apply`
+`hasura migrate apply`
+`hasura metadata reload`
+`hasura seed apply`
+`hasura console`
 
-### Utilities
+Run `yarn dev` in the web folder.
 
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-yarn build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-yarn
-yarn dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
+The app should now run at `http://localhost:3000`.

@@ -24,6 +24,7 @@ export async function middleware(req: NextRequest) {
   const adminRoutes = [
     '/dashboard',
     '/dashboard/organizations',
+    '/dashboard/users',
     '/dashboard/categories',
     '/dashboard/products',
     '/profile',
@@ -32,6 +33,7 @@ export async function middleware(req: NextRequest) {
   const managerRoutes = [
     '/dashboard',
     '/profile',
+    '/dashboard/users',
     '/dashboard/categories',
     '/dashboard/products',
   ];

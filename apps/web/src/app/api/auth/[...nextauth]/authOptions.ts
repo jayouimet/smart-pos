@@ -101,6 +101,10 @@ export const authOptions: AuthOptions = {
           id: token.id,
         });
 
+        console.log(queryUserRes)
+        token.role = queryUserRes.system_role.name;
+        token.organization_role = queryUserRes.organization_role.name;
+
         /*if (queryUserRes.organization_users) {
             token.org_ids = queryUserRes.organization_users.map((organization_user) => {
               return organization_user.organization.id;
@@ -244,6 +248,10 @@ async function queryUserByPk({ id }: { id: string }) {
           password_hash
           organization_id
           system_role {
+            id
+            name
+          }
+          organization_role {
             id
             name
           }

@@ -8,10 +8,9 @@ import DataTable from "@components/tables/DataTable";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import Category from "@pos_types/categories/Category";
 import Organization from "@pos_types/organizations/Organization";
 
-const columnHelper = createColumnHelper<Category>();
+const columnHelper = createColumnHelper<Organization>();
 
 const columns = [
   columnHelper.accessor("name", {
@@ -152,7 +151,7 @@ const OrganizationsPage = () => {
         </CardBody>
         {isModalOpen && (
           <UpsertModal
-            title={'Category'}
+            title={'Organization'}
             isModalOpen={isModalOpen}
             fields={fields}
             onClose={handleClose}

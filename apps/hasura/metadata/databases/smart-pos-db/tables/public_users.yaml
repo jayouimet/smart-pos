@@ -29,6 +29,20 @@ object_relationships:
         remote_table:
           name: system_roles
           schema: public
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        _and:
+          - organization:
+              users:
+                id:
+                  _eq: X-Hasura-User-Id
+          - system_role:
+              name:
+                _neq: admin
+      columns: []
+    comment: ""
 select_permissions:
   - role: user
     permission:
@@ -44,10 +58,14 @@ select_permissions:
         - organization_role_id
         - system_role_id
       filter:
-        organization:
-          users:
-            id:
-              _eq: X-Hasura-User-Id
+        _and:
+          - organization:
+              users:
+                id:
+                  _eq: X-Hasura-User-Id
+          - system_role:
+              name:
+                _neq: admin
       allow_aggregations: true
     comment: ""
 update_permissions:
@@ -57,7 +75,34 @@ update_permissions:
         - first_name
         - last_name
       filter:
-        id:
-          _eq: X-Hasura-User-Id
-      check: null
+        _and:
+          - organization:
+              users:
+                id:
+                  _eq: X-Hasura-User-Id
+          - system_role:
+              name:
+                _neq: admin
+      check:
+        _and:
+          - organization:
+              users:
+                id:
+                  _eq: X-Hasura-User-Id
+          - system_role:
+              name:
+                _neq: admin
+    comment: ""
+delete_permissions:
+  - role: user
+    permission:
+      filter:
+        _and:
+          - organization:
+              users:
+                id:
+                  _eq: X-Hasura-User-Id
+          - system_role:
+              name:
+                _neq: admin
     comment: ""

@@ -3,8 +3,8 @@
 import { Flex, Stack, Center } from '@chakra-ui/layout';
 import { useFormik } from 'formik';
 import { Button, Input, Link, Spinner, useToast, Box } from '@chakra-ui/react';
-import { signIn } from 'next-auth/react';
-import { useState } from 'react';
+import { signIn, useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import * as Yup from 'yup';
 
@@ -16,6 +16,8 @@ type SigninInputs = {
 export default function Signin() {
   const router = useRouter();
   const toast = useToast();
+
+  const { data: session, status } = useSession();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -37,7 +39,6 @@ export default function Signin() {
         email: values.email,
         password: values.password,
         action: 'signin',
-        callbackUrl: `/dashboard`,
       })
       if (res) {
         setIsLoading(false);
@@ -51,12 +52,15 @@ export default function Signin() {
           isClosable: true,
         })
       } 
-      if (res?.ok) {
-        router.push('/dashboard');
-      }
       setSubmitting(false);
     },
   });
+
+  useEffect(() => {
+    if (status === 'authenticated' && session.user.id) {
+      window.location.href = '/dashboard';
+    }
+  }, [status, session]);
 
   return (
     <Flex 

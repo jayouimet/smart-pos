@@ -11,7 +11,7 @@ import {
   FlexProps,
   Stack,
 } from '@chakra-ui/react';
-import { FiHome, FiLayers, FiUsers, FiLogOut, FiCpu, FiBox } from 'react-icons/fi';
+import { FiHome, FiLayers, FiUsers, FiLogOut, FiBriefcase, FiBox } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
@@ -21,7 +21,6 @@ import { useRouter } from 'next/navigation';
 import MenuButton from '@components/navigation/MenuButton';
 import { SystemRoles } from '@pos_types/roles/SystemRoles';
 import { OrganizationRoles } from '@pos_types/roles/OrganizationRoles';
-import { Session } from 'inspector';
 
 export interface LinkItemProps {
   name: string;
@@ -66,9 +65,16 @@ const LinkItems: Array<LinkItemProps> = [
   },
   {
     name: 'Organizations',
-    icon: FiUsers,
+    icon: FiBriefcase,
     href: '/dashboard/organizations',
     minSysRole: SystemRoles.ADMIN,
+    minOrgRole: OrganizationRoles.MANAGER,
+  },
+  {
+    name: 'Users',
+    icon: FiUsers,
+    href: '/dashboard/users',
+    minSysRole: SystemRoles.USER,
     minOrgRole: OrganizationRoles.MANAGER,
   },
   {

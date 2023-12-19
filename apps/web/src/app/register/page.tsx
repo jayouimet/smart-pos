@@ -3,8 +3,8 @@
 import { Flex, Stack, Center } from '@chakra-ui/layout';
 import { useFormik } from 'formik';
 import { Button, Input, Link, Select, FormControl, FormLabel, Spinner, useToast, Box } from '@chakra-ui/react';
-import { signIn } from 'next-auth/react';
-import { ChangeEvent, useState } from 'react';
+import { signIn, useSession } from 'next-auth/react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { GET_ORGANIZATIONS } from '@gql/organizations';
 import { useQuery } from '@apollo/client';
@@ -23,7 +23,9 @@ type RegisterInputs = {
 export default function Register() {
   const router = useRouter();
   const toast = useToast();
-  
+
+  const { data: session, status } = useSession();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const [organizationId, setOrganizationId] = useState<string | undefined>()
@@ -88,12 +90,15 @@ export default function Register() {
           isClosable: true,
         })
       } 
-      if (res?.ok) {
-        router.push('/dashboard');
-      }
       setSubmitting(false);
     },
   });
+
+  useEffect(() => {
+    if (status === 'authenticated' && session.user.id) {
+      window.location.href = '/dashboard';
+    }
+  }, [status, session]);
 
   return (
     <Flex 

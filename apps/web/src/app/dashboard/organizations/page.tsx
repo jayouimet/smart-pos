@@ -130,7 +130,7 @@ const OrganizationsPage = () => {
             mb={4}
           >
             <Text fontSize={'5xl'} fontWeight="bold">
-              {'Categories'}
+              {'Organizations'}
             </Text>
           </Heading>
         </CardHeader>

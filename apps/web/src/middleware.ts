@@ -18,8 +18,7 @@ export async function middleware(req: NextRequest) {
 
   const anonymousRoutes = [
     '/',
-    '/auth/signin',
-    '/auth/register',
+    '/register',
   ]
 
   const adminRoutes = [
@@ -78,6 +77,6 @@ export const config = {
     '/',
     '/dashboard/:path*',
     '/profile/:path*',
-    '/auth/:path*',
+    '/register/:path*',
   ],
 };

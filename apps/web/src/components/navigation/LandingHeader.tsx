@@ -84,7 +84,7 @@ export default function LandingHeader() {
               fontWeight={600}
               color={"white"}
               bg={"pink.400"}
-              // href={"/auth/register"}
+              // href={"/register"}
               _hover={{
                 bg: "pink.300",
               }}
@@ -100,7 +100,7 @@ export default function LandingHeader() {
               fontWeight={600}
               color={"white"}
               bg={"pink.400"}
-              // href={"/auth/register"}
+              // href={"/register"}
               _hover={{
                 bg: "pink.300",
               }}

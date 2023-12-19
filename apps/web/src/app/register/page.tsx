@@ -192,7 +192,7 @@ export default function Register() {
             </Stack>
           </form>
           <Center>
-            <Link variant={'gray'} href={"/auth/signin"}>Already have an account?</Link>
+            <Link variant={'gray'} href={"/"}>Already have an account?</Link>
           </Center>
         </Stack>
       </Center>

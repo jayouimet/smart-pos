@@ -89,8 +89,8 @@ const ProductsPage = () => {
         isRequired: true
       },
       numberInputProps: {
-        precision: 2,
-        step: 0.01,
+        precision: 0,
+        step: 1,
         min: 0,
         max: 100000,
         keepWithinRange: true,
@@ -220,7 +220,7 @@ const ProductsPage = () => {
     let gqlProduct = {
       name: product?.name,
       description: product?.description,
-      price: product?.price,
+      price: parseInt(product?.price),
       organization_id: session?.user.organization_id,
       location: product?.location
     }
@@ -267,7 +267,7 @@ const ProductsPage = () => {
     let gqlProduct = {
       name: product?.name,
       description: product?.description,
-      price: product?.price,
+      price: parseInt(product?.price),
       organization_id: session?.user.organization_id,
       location: product?.location,
       product_categories: {

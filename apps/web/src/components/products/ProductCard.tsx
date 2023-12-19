@@ -42,7 +42,7 @@ const ProductCard = (props: ProductCardProps) => {
             <Text fontSize="15" fontWeight={'normal'}>
               LOCATION
             </Text>
-            <Text fontSize="35" fontWeight={'bold'} color={'green'} fontStyle={'italic'}>
+            <Text fontSize="30" fontWeight={'bold'} color={'green'} fontStyle={'italic'}>
               {product.location || 'AAFF'}
             </Text>
           </Box>
@@ -50,7 +50,7 @@ const ProductCard = (props: ProductCardProps) => {
             <Text fontSize="15" fontWeight={'normal'}>
               Price
             </Text>
-            <Text fontSize="35" fontWeight={'bold'} color={'green'} fontStyle={'italic'}>
+            <Text fontSize="30" fontWeight={'bold'} color={'green'} fontStyle={'italic'}>
               {`${parseFloat((product.price / 100).toString()).toFixed(2)} $` || 'NAN'}
             </Text>
           </Box>

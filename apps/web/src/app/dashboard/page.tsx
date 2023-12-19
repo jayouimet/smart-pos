@@ -16,11 +16,15 @@ import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import Product from "@pos_types/products/Product";
+import ProductInfoModal from '@components/modals/ProductInfoModal';
 
 function DashboardIndex() {
   const [prompt, setPrompt] = useState<string>('');
   const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | undefined>(undefined);
 
   const { data: session } = useSession();
   const { complete, completion, setCompletion } = useCompletion({
@@ -54,7 +58,7 @@ function DashboardIndex() {
     );
 
     // 2. given threshold
-    const threshold = 0.75;
+    const threshold = 0.70;
     // const threshold = 0.30;
     const similarItems = items.data.map(([doc, score]) => {
       if (score > threshold) return;
@@ -100,12 +104,15 @@ function DashboardIndex() {
         </Flex>
         {
             displayedProducts.length === 0 ?
-              <Textarea width={'100%'} fontSize={'sm'} value={completion} resize={"none"} height={'55vh'} readOnly={true} />
+              <Textarea width={'100%'} fontSize={'1.5em'} value={completion} resize={"none"} height={'55vh'} readOnly={true} />
               :
               <Flex width={'100%'} flexDirection={'row'} alignContent={'stretch'} flexWrap={'wrap'} gap={'0.5%'} height={'55vh'} >
                 {
                   displayedProducts.map(product => {
-                    return <ProductCard flexBasis={'33%'} height={'50%'} product={product} />
+                    return <ProductCard onClick={() => {
+                      setIsModalOpen(true);
+                      setSelectedProduct(product)
+                    }} flexBasis={'33%'} height={'50%'} product={product} />
                   })
                 }
               </Flex>
@@ -114,6 +121,18 @@ function DashboardIndex() {
             <Button isLoading={isLoading} width={'100%'} maxWidth={'100%'} mt={5} height={'15vh'} onClick={() => generateOutput()}>Find it</Button>
           </Flex>
       </Stack>
+      {
+        isModalOpen && 
+        <ProductInfoModal
+          title='Product'
+          isModalOpen={isModalOpen}
+          onClose={() => {
+            setSelectedProduct(undefined)
+            setIsModalOpen(false)
+          }}
+          product={selectedProduct}
+        />
+      }
     </Flex>
   );
 }

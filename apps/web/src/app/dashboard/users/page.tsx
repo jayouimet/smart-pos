@@ -170,7 +170,7 @@ const UsersPage = () => {
             mb={4}
           >
             <Text fontSize={'5xl'} fontWeight="bold">
-              {'Categories'}
+              {'Users'}
             </Text>
           </Heading>
         </CardHeader>
